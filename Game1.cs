@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq.Expressions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -8,6 +9,10 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+    Texture2D line;
+
+    int w_width;
+    int w_height;
 
     public Game1()
     {
@@ -18,7 +23,12 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
+        line = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+        line.SetData(new[] {Color.White});
+
+        w_width = GraphicsDevice.Viewport.Width;
+        w_height = GraphicsDevice.Viewport.Height;
+        
 
         base.Initialize();
     }
@@ -44,7 +54,9 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        // TODO: Add your drawing code here
+       _spriteBatch.Begin();
+       _spriteBatch.Draw(line, new Rectangle(w_width / 2, w_height / 2, 200, 1), null, Color.White, 0.785398f, new Vector2(0,0), SpriteEffects.None, 0.0f);
+       _spriteBatch.End();
 
         base.Draw(gameTime);
     }

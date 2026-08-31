@@ -34,3 +34,4 @@ D:\code\monogame\Maxwell\obj\Debug\net9.0\refint\Maxwell.dll
 D:\code\monogame\Maxwell\obj\Debug\net9.0\Maxwell.pdb
 D:\code\monogame\Maxwell\obj\Debug\net9.0\Maxwell.genruntimeconfig.cache
 D:\code\monogame\Maxwell\obj\Debug\net9.0\ref\Maxwell.dll
+D:\code\monogame\Maxwell\obj\Debug\net9.0\Maxwell.sourcelink.json
