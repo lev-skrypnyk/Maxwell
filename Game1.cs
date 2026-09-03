@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Net.Http.Headers;
+
 //using System.Numerics;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -13,6 +17,15 @@ public class Game1 : Game
     private SpriteBatch _spriteBatch;
     Texture2D line;
 
+    List<Triangle> Mesh;
+
+    float fNear;
+    float fFar;
+    float fFov;
+    float fAspectRatio;
+    float fFovRad;
+
+    matrix_4x4 proj_mat = new matrix_4x4();
 
     int w_width;
     int w_height;
@@ -37,7 +50,7 @@ public class Game1 : Game
         w_width = GraphicsDevice.Viewport.Width;
         w_height = GraphicsDevice.Viewport.Height;
 
-        List<Triangle> Mesh = new List<Triangle>
+        Mesh = new List<Triangle>
         {
             // South
             new(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f), new Vector3(1.0f, 1.0f, 0.0f)),
@@ -64,6 +77,20 @@ public class Game1 : Game
             new(new Vector3(1.0f, 0.0f, 1.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f)),
         };
         
+        fNear = 0.1f;
+        fFar = 1000; 
+        fFov = 90.0f;
+        fAspectRatio = w_height / w_width;
+        fFovRad = 1.0f / MathF.Tan(fFov * 0.5f / 180.0f * 3.1415f);
+
+        proj_mat[0, 0] = fAspectRatio * fFovRad;
+        proj_mat[1, 1] = fFovRad;
+        proj_mat[2, 2] = fFar / (fFar - fNear);
+        proj_mat[3, 2] = (-fFar * fNear) / (fFar - fNear);
+        proj_mat[2, 3] = 1.0f;
+        proj_mat[3, 3] = 0.0f;
+
+
 
         base.Initialize();
     }
@@ -81,6 +108,10 @@ public class Game1 : Game
             Exit();
 
         // TODO: Add your update logic here
+        for(int i = 0; Mesh.Count < 0; i++)
+        {
+            Console.WriteLine(Mesh[i]);
+        }
 
         base.Update(gameTime);
     }
