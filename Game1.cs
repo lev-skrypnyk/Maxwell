@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net.Http.Headers;
-
-//using System.Numerics;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -20,6 +17,13 @@ public class Game1 : Game
     int w_width;
     int w_height;
 
+    private Vector3 cameraPosition;
+    private Vector3 cameraTarget;
+    private Vector3 cameraUp;
+
+    private VertexPositionColor[] _vertices;
+    private short[] _indices;
+
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -34,11 +38,51 @@ public class Game1 : Game
         _graphics.PreferredBackBufferHeight = 720;
         _graphics.ApplyChanges();
 
-        line = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-        line.SetData(new[] {Color.White});
-
         w_width = GraphicsDevice.Viewport.Width;
         w_height = GraphicsDevice.Viewport.Height;
+
+        cameraPosition = new Vector3(2, 2, 0);
+        cameraTarget = new Vector3(0, 0, 0);
+        cameraUp = new Vector3(0, 1, 0);
+
+        _vertices = new VertexPositionColor[8]
+        {
+            new VertexPositionColor(new Vector3(0,0,0), Color.Gray),
+            new VertexPositionColor(new Vector3(0,1,0), Color.Gray),
+            new VertexPositionColor(new Vector3(1,1,0), Color.Gray),
+            new VertexPositionColor(new Vector3(1,0,0), Color.Gray),
+            new VertexPositionColor(new Vector3(0,0,1), Color.Gray),
+            new VertexPositionColor(new Vector3(0,1,1), Color.Gray),
+            new VertexPositionColor(new Vector3(1,1,1), Color.Gray),
+            new VertexPositionColor(new Vector3(1,0,1), Color.Gray)
+        };
+
+        _indices = new short[]
+        {
+            0, 1, 2, // south
+            0, 2, 3,
+
+            3, 2, 6, // east
+            3, 6, 7,
+
+            7, 6, 5, // north
+            7, 5, 4,
+
+            4, 5, 1, // west
+            4, 1, 0,
+
+            1, 5, 6, // top
+            1, 6, 2,
+
+            0, 7, 4, // bottom
+            0, 3, 7
+        };
+
+        Matrix.CreateLookAt(
+        cameraPosition,
+        cameraTarget,
+        cameraUp
+        );
 
         base.Initialize();
     }
@@ -63,9 +107,7 @@ public class Game1 : Game
         GraphicsDevice.Clear(Color.Black);
 
        _spriteBatch.Begin();
-       _spriteBatch.Draw(line, new Rectangle(w_width / 2, w_height / 2, 200, 2), null, Color.White, 0, new Vector2(0,0), SpriteEffects.None, 0.0f);
-       _spriteBatch.Draw(line, new Rectangle(w_width / 2, w_height / 2, 200, 2), null, Color.White, -1.5708f, new Vector2(0,0), SpriteEffects.None, 0.0f);
-       _spriteBatch.Draw(line, new Rectangle(w_width / 2 + 200, w_height / 2, 282, 2), null, Color.White, -2.35619f, new Vector2(0,0), SpriteEffects.None, 0.0f);
+
        _spriteBatch.End();
 
         base.Draw(gameTime);
