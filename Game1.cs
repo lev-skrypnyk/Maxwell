@@ -17,6 +17,14 @@ public class Game1 : Game
     int w_width;
     int w_height;
 
+    private float aspect_ratio;
+
+    private Matrix _view;
+    private Matrix _world;
+    private Matrix _projection;
+
+    private BasicEffect _effect;
+
     private Vector3 cameraPosition;
     private Vector3 cameraTarget;
     private Vector3 cameraUp;
@@ -41,20 +49,22 @@ public class Game1 : Game
         w_width = GraphicsDevice.Viewport.Width;
         w_height = GraphicsDevice.Viewport.Height;
 
-        cameraPosition = new Vector3(2, 2, 0);
-        cameraTarget = new Vector3(0, 0, 0);
+        cameraPosition = new Vector3(2, 2, 2);
+        cameraTarget = new Vector3(0.5f, 0.5f, 0.5f);
         cameraUp = new Vector3(0, 1, 0);
+
+        aspect_ratio = (float)w_width / w_height;
 
         _vertices = new VertexPositionColor[8]
         {
-            new VertexPositionColor(new Vector3(0,0,0), Color.Gray),
-            new VertexPositionColor(new Vector3(0,1,0), Color.Gray),
-            new VertexPositionColor(new Vector3(1,1,0), Color.Gray),
-            new VertexPositionColor(new Vector3(1,0,0), Color.Gray),
-            new VertexPositionColor(new Vector3(0,0,1), Color.Gray),
-            new VertexPositionColor(new Vector3(0,1,1), Color.Gray),
-            new VertexPositionColor(new Vector3(1,1,1), Color.Gray),
-            new VertexPositionColor(new Vector3(1,0,1), Color.Gray)
+            new VertexPositionColor(new Vector3(0,0,0), Color.White),
+            new VertexPositionColor(new Vector3(0,1,0), Color.White),
+            new VertexPositionColor(new Vector3(1,1,0), Color.White),
+            new VertexPositionColor(new Vector3(1,0,0), Color.White),
+            new VertexPositionColor(new Vector3(0,0,1), Color.White),
+            new VertexPositionColor(new Vector3(0,1,1), Color.White),
+            new VertexPositionColor(new Vector3(1,1,1), Color.White),
+            new VertexPositionColor(new Vector3(1,0,1), Color.White)
         };
 
         _indices = new short[]
@@ -78,11 +88,29 @@ public class Game1 : Game
             0, 3, 7
         };
 
-        Matrix.CreateLookAt(
+        _view = Matrix.CreateLookAt
+        (
         cameraPosition,
         cameraTarget,
         cameraUp
         );
+
+        _projection = Matrix.CreatePerspectiveFieldOfView
+        (
+            (float)(45.0f * (Math.PI / 180)),
+            aspect_ratio,
+            0.1f,
+            100.0f
+        );
+
+        _world = Matrix.Identity;
+
+        _effect = new BasicEffect(GraphicsDevice);
+
+        _effect.VertexColorEnabled = true;
+        _effect.World = _world;
+        _effect.View = _view;
+        _effect.Projection = _projection;
 
         base.Initialize();
     }
@@ -106,9 +134,21 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.Black);
 
-       _spriteBatch.Begin();
+        foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
+        {
+            pass.Apply();
 
-       _spriteBatch.End();
+            GraphicsDevice.DrawUserIndexedPrimitives
+            (
+                PrimitiveType.TriangleList,
+                _vertices,
+                0,
+                _vertices.Length,
+                _indices,
+                0,
+                _indices.Length / 3
+            );
+        }
 
         base.Draw(gameTime);
     }
