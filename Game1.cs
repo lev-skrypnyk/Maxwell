@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -10,12 +13,19 @@ namespace Maxwell;
 
 public class Game1 : Game
 {
+
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     Texture2D line;
+    
+    private Color bg_color = new Color(34,34,34);
+    private Color obj_color = new Color(160, 160, 160);
 
     int w_width;
     int w_height;
+
+    private Vector3 movement;
+    private float cameraSpeed;
 
     private float aspect_ratio;
 
@@ -31,6 +41,8 @@ public class Game1 : Game
 
     private VertexPositionColor[] _vertices;
     private short[] _indices;
+
+    private KeyboardState keyboardState;
 
     public Game1()
     {
@@ -49,22 +61,25 @@ public class Game1 : Game
         w_width = GraphicsDevice.Viewport.Width;
         w_height = GraphicsDevice.Viewport.Height;
 
-        cameraPosition = new Vector3(2, 2, 2);
+        cameraPosition = new Vector3(3, 2.5f, 3);
         cameraTarget = new Vector3(0.5f, 0.5f, 0.5f);
         cameraUp = new Vector3(0, 1, 0);
+
+        movement = Vector3.Zero;
+        cameraSpeed = 0.015f;
 
         aspect_ratio = (float)w_width / w_height;
 
         _vertices = new VertexPositionColor[8]
         {
-            new VertexPositionColor(new Vector3(0,0,0), Color.White),
-            new VertexPositionColor(new Vector3(0,1,0), Color.White),
-            new VertexPositionColor(new Vector3(1,1,0), Color.White),
-            new VertexPositionColor(new Vector3(1,0,0), Color.White),
-            new VertexPositionColor(new Vector3(0,0,1), Color.White),
-            new VertexPositionColor(new Vector3(0,1,1), Color.White),
-            new VertexPositionColor(new Vector3(1,1,1), Color.White),
-            new VertexPositionColor(new Vector3(1,0,1), Color.White)
+            new VertexPositionColor(new Vector3(0,0,0), obj_color),
+            new VertexPositionColor(new Vector3(0,1,0), obj_color),
+            new VertexPositionColor(new Vector3(1,1,0), obj_color),
+            new VertexPositionColor(new Vector3(1,0,0), obj_color),
+            new VertexPositionColor(new Vector3(0,0,1), obj_color),
+            new VertexPositionColor(new Vector3(0,1,1), obj_color),
+            new VertexPositionColor(new Vector3(1,1,1), obj_color),
+            new VertexPositionColor(new Vector3(1,0,1), obj_color)
         };
 
         _indices = new short[]
@@ -127,12 +142,30 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+        keyboardState = Keyboard.GetState();
+        movement = Vector3.Zero;
+
+        if(keyboardState.IsKeyDown(Keys.Q))
+            movement.X -= cameraSpeed;
+
+        if(keyboardState.IsKeyDown(Keys.W))
+            movement.Y -= cameraSpeed;
+        
+        if(keyboardState.IsKeyDown(Keys.E))
+            movement.Z -= cameraSpeed;
+
+        cameraPosition += movement;
+        cameraTarget += movement;
+
+        _view = Matrix.CreateLookAt(cameraPosition, cameraTarget, cameraUp);
+        _effect.View = _view;
+
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.Black);
+        GraphicsDevice.Clear(bg_color);
 
         foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
         {
