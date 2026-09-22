@@ -35,3 +35,4 @@ D:\code\monogame\Maxwell\obj\Debug\net9.0\Maxwell.pdb
 D:\code\monogame\Maxwell\obj\Debug\net9.0\Maxwell.genruntimeconfig.cache
 D:\code\monogame\Maxwell\obj\Debug\net9.0\ref\Maxwell.dll
 D:\code\monogame\Maxwell\obj\Debug\net9.0\Maxwell.sourcelink.json
+D:\code\monogame\Maxwell\bin\Debug\net9.0\Content\MainFont.xnb

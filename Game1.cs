@@ -21,6 +21,9 @@ public class Game1 : Game
     private Color bg_color = new Color(34,34,34);
     private Color obj_color = new Color(160, 160, 160);
 
+    private Color zAxisColor = new Color(150, 60, 75);
+    private Color xAxisColor = new Color(100, 130, 50);
+
     int w_width;
     int w_height;
 
@@ -40,6 +43,7 @@ public class Game1 : Game
     private Vector3 cameraUp;
 
     private VertexPositionColor[] _vertices;
+    private VertexPositionColor[] _axisVertices;
     private short[] _indices;
 
     private KeyboardState keyboardState;
@@ -69,6 +73,14 @@ public class Game1 : Game
         cameraSpeed = 0.015f;
 
         aspect_ratio = (float)w_width / w_height;
+
+        _axisVertices = new VertexPositionColor[4]
+        {
+            new VertexPositionColor(new Vector3(-30,-0.01f, 0.5f),  xAxisColor),    // Green
+            new VertexPositionColor(new Vector3(30,-0.01f, 0.5f),   xAxisColor),   
+            new VertexPositionColor(new Vector3(0.5f,-0.01f,-30),   zAxisColor),    // Red
+            new VertexPositionColor(new Vector3(0.5f,-0.01f,30),    zAxisColor),  
+        };
 
         _vertices = new VertexPositionColor[8]
         {
@@ -181,6 +193,8 @@ public class Game1 : Game
                 0,
                 _indices.Length / 3
             );
+
+            GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, _axisVertices, 0, 2);
         }
 
         base.Draw(gameTime);
