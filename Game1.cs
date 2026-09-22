@@ -17,12 +17,15 @@ public class Game1 : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     Texture2D line;
+
+    SpriteFont ui_font;
     
     private Color bg_color = new Color(34,34,34);
     private Color obj_color = new Color(160, 160, 160);
 
     private Color zAxisColor = new Color(150, 60, 75);
     private Color xAxisColor = new Color(100, 130, 50);
+    private Color yAxisColor = new Color(50, 135, 235);
 
     int w_width;
     int w_height;
@@ -74,12 +77,14 @@ public class Game1 : Game
 
         aspect_ratio = (float)w_width / w_height;
 
-        _axisVertices = new VertexPositionColor[4]
+        _axisVertices = new VertexPositionColor[6]
         {
-            new VertexPositionColor(new Vector3(-30,-0.01f, 0.5f),  xAxisColor),    // Green
-            new VertexPositionColor(new Vector3(30,-0.01f, 0.5f),   xAxisColor),   
-            new VertexPositionColor(new Vector3(0.5f,-0.01f,-30),   zAxisColor),    // Red
-            new VertexPositionColor(new Vector3(0.5f,-0.01f,30),    zAxisColor),  
+            new VertexPositionColor(new Vector3(-30, -0.01f, 0.5f),  xAxisColor),    // Green
+            new VertexPositionColor(new Vector3(30, -0.01f, 0.5f),   xAxisColor),  
+            new VertexPositionColor(new Vector3(0.5f, -0.01f, -30),   zAxisColor),    // Red
+            new VertexPositionColor(new Vector3(0.5f, -0.01f, 30),    zAxisColor),
+            new VertexPositionColor(new Vector3(0.5f, -30, 0.5f),   yAxisColor),    // Red
+            new VertexPositionColor(new Vector3(0.5f, 30, 0.5f),    yAxisColor) 
         };
 
         _vertices = new VertexPositionColor[8]
@@ -146,6 +151,8 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+        ui_font = Content.Load<SpriteFont>("MainFont");
+
         // TODO: use this.Content to load your game content here
     }
 
@@ -179,6 +186,11 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(bg_color);
 
+        _spriteBatch.Begin();
+        _spriteBatch.DrawString(ui_font, $"Camera Position ({Math.Round(cameraPosition.X, 2)}, {Math.Round(cameraPosition.Y, 2)}, {Math.Round(cameraPosition.Z, 2)})", new Vector2(10, 10), Color.White);
+        _spriteBatch.End();
+
+        GraphicsDevice.DepthStencilState = DepthStencilState.Default;
         foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
         {
             pass.Apply();
@@ -194,7 +206,7 @@ public class Game1 : Game
                 _indices.Length / 3
             );
 
-            GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, _axisVertices, 0, 2);
+            GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, _axisVertices, 0, 2); //change 2->3 if I want y-axis to be displayed.
         }
 
         base.Draw(gameTime);
