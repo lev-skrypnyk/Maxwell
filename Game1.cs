@@ -16,16 +16,15 @@ public class Game1 : Game
 
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    Texture2D line;
 
     SpriteFont ui_font;
     
     private Color bg_color = new Color(34,34,34);
     private Color obj_color = new Color(160, 160, 160);
 
-    private Color zAxisColor = new Color(150, 60, 75);
-    private Color xAxisColor = new Color(100, 130, 50);
-    private Color yAxisColor = new Color(50, 135, 235);
+    private Color zAxisColor = new Color(150, 60, 75);  //red
+    private Color xAxisColor = new Color(100, 130, 50); //green
+    private Color yAxisColor = new Color(50, 135, 235); //blue
 
     int w_width;
     int w_height;
@@ -51,6 +50,27 @@ public class Game1 : Game
 
     private KeyboardState keyboardState;
 
+    // mouse
+    private MouseState mouseState;
+    private int mouseX;
+    private int mouseY;
+    private int PreviousMouseX;
+    private int PreviousMouseY;
+    private int deltaX;
+    private int deltaY;
+
+    private float theta; //horizontal rotation
+    private float phi;
+
+    ButtonState previousMiddleButtonState = ButtonState.Released;
+
+    private float mouseSensitivity;
+    private float zoomMultiplier;
+
+    private float radius; //distance from target object position (e.g. 0,0,0) to camera position (e.g. 3, 2.5, 3)
+
+    private bool MMBstatus;
+
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -68,23 +88,35 @@ public class Game1 : Game
         w_width = GraphicsDevice.Viewport.Width;
         w_height = GraphicsDevice.Viewport.Height;
 
-        cameraPosition = new Vector3(3, 2.5f, 3);
+        cameraPosition = new Vector3(4, 4, 4);
         cameraTarget = new Vector3(0.5f, 0.5f, 0.5f);
         cameraUp = new Vector3(0, 1, 0);
 
         movement = Vector3.Zero;
         cameraSpeed = 0.015f;
 
+        zoomMultiplier = 1.0f;
+
+        radius = Vector3.Distance(cameraTarget, cameraPosition);
+
+        PreviousMouseX = 0;
+        PreviousMouseY = 0;
+        deltaX = 0;
+        deltaY = 0;
+        mouseSensitivity = 0.35f;
+
+        MMBstatus = false;
+
         aspect_ratio = (float)w_width / w_height;
 
         _axisVertices = new VertexPositionColor[6]
         {
-            new VertexPositionColor(new Vector3(-30, -0.01f, 0.5f),  xAxisColor),    // Green
-            new VertexPositionColor(new Vector3(30, -0.01f, 0.5f),   xAxisColor),  
-            new VertexPositionColor(new Vector3(0.5f, -0.01f, -30),   zAxisColor),    // Red
-            new VertexPositionColor(new Vector3(0.5f, -0.01f, 30),    zAxisColor),
-            new VertexPositionColor(new Vector3(0.5f, -30, 0.5f),   yAxisColor),    // Red
-            new VertexPositionColor(new Vector3(0.5f, 30, 0.5f),    yAxisColor) 
+            new VertexPositionColor(new Vector3(-100, -0.01f, 0.5f),  xAxisColor),    // Green
+            new VertexPositionColor(new Vector3(100, -0.01f, 0.5f),   xAxisColor),  
+            new VertexPositionColor(new Vector3(0.5f, -0.01f, -100),   zAxisColor),    // Red
+            new VertexPositionColor(new Vector3(0.5f, -0.01f, 100),    zAxisColor),
+            new VertexPositionColor(new Vector3(0.5f, -100, 0.5f),   yAxisColor),    // Red
+            new VertexPositionColor(new Vector3(0.5f, 100, 0.5f),    yAxisColor) 
         };
 
         _vertices = new VertexPositionColor[8]
@@ -161,17 +193,43 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        keyboardState = Keyboard.GetState();
         movement = Vector3.Zero;
+        MMBstatus = false;
+        zoomMultiplier = 1.0f;
 
-        if(keyboardState.IsKeyDown(Keys.Q))
-            movement.X -= cameraSpeed;
+        keyboardState = Keyboard.GetState();
+        mouseState = Mouse.GetState();
 
-        if(keyboardState.IsKeyDown(Keys.W))
-            movement.Y -= cameraSpeed;
-        
-        if(keyboardState.IsKeyDown(Keys.E))
-            movement.Z -= cameraSpeed;
+        mouseX = mouseState.X;
+        mouseY = mouseState.Y;
+
+        if(mouseState.MiddleButton == ButtonState.Pressed)
+        {
+            MMBstatus = true;
+            if(previousMiddleButtonState == ButtonState.Released)
+            {
+                PreviousMouseX = mouseX;
+                PreviousMouseY = mouseY;
+            }
+            else
+            {
+                deltaX = (mouseX - PreviousMouseX) * -1;
+                deltaY = mouseY - PreviousMouseY; // as mouse moves up, the value of y increases
+            
+                theta += deltaX * mouseSensitivity;
+                phi += deltaY * mouseSensitivity;
+
+            }
+
+            //spherical coordinates maths converion
+            cameraPosition.X = (float)(radius * Math.Cos(phi * (Math.PI / 180)) * Math.Sin(theta * (Math.PI / 180)));
+            cameraPosition.Y = (float)(radius * Math.Sin(phi * (Math.PI / 180)));
+            cameraPosition.Z = (float)(radius * Math.Cos(phi * (Math.PI / 180)) * Math.Cos(theta * (Math.PI / 180)));
+
+            PreviousMouseX = mouseX;
+            PreviousMouseY = mouseY;
+        }
+        previousMiddleButtonState = mouseState.MiddleButton;
 
         cameraPosition += movement;
         cameraTarget += movement;
@@ -187,10 +245,23 @@ public class Game1 : Game
         GraphicsDevice.Clear(bg_color);
 
         _spriteBatch.Begin();
-        _spriteBatch.DrawString(ui_font, $"Camera Position ({Math.Round(cameraPosition.X, 2)}, {Math.Round(cameraPosition.Y, 2)}, {Math.Round(cameraPosition.Z, 2)})", new Vector2(10, 10), Color.White);
+
+        // X, Y, Z
+        _spriteBatch.DrawString(ui_font, $"X", new Vector2(10, 10), xAxisColor);
+        _spriteBatch.DrawString(ui_font, $"Y", new Vector2(25, 10), yAxisColor);
+        _spriteBatch.DrawString(ui_font, $"Z", new Vector2(40, 10), zAxisColor);
+
+
+        _spriteBatch.DrawString(ui_font, $"Camera Position ({Math.Round(cameraPosition.X, 2)}, {Math.Round(cameraPosition.Y, 2)}, {Math.Round(cameraPosition.Z, 2)})", new Vector2(10, 30), Color.White);
+        _spriteBatch.DrawString(ui_font, $"Cursor Position ({mouseX}, {mouseY})", new Vector2(10, 50), Color.White);
+        _spriteBatch.DrawString(ui_font, $"Delta (X:{deltaX}, Y:{deltaY})", new Vector2(10, 70), Color.White);
+        _spriteBatch.DrawString(ui_font, $"MMB held: {MMBstatus}", new Vector2(10, 90), Color.White);
         _spriteBatch.End();
 
-        GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+        //relativeMousePos = Vector2.transform(MousePos, Matrix.Invert(transformMatrix));
+
+        GraphicsDevice.DepthStencilState = DepthStencilState.Default; //fixes problem where axis-lines get seen through the cube because of _spriteBatch.Begin and _spriteBatch.Begin.
+
         foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
         {
             pass.Apply();
