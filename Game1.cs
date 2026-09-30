@@ -44,9 +44,7 @@ public class Game1 : Game
     private Vector3 cameraTarget;
     private Vector3 cameraUp;
 
-    private VertexPositionColor[] _vertices;
     private VertexPositionColor[] _axisVertices;
-    private short[] _indices;
 
     private KeyboardState keyboardState;
 
@@ -70,6 +68,8 @@ public class Game1 : Game
     private float radius; //distance from target object position (e.g. 0,0,0) to camera position (e.g. 3, 2.5, 3)
 
     private bool MMBstatus;
+
+    Cube cube;
 
     public Game1()
     {
@@ -109,48 +109,21 @@ public class Game1 : Game
 
         aspect_ratio = (float)w_width / w_height;
 
+        cube = new Cube(obj_color);
+
+        //_perspectiveGridVertices = new VertexPositionColor[]
+
         _axisVertices = new VertexPositionColor[6]
         {
             new VertexPositionColor(new Vector3(-100, -0.01f, 0.5f),  xAxisColor),    // Green
             new VertexPositionColor(new Vector3(100, -0.01f, 0.5f),   xAxisColor),  
             new VertexPositionColor(new Vector3(0.5f, -0.01f, -100),   zAxisColor),    // Red
             new VertexPositionColor(new Vector3(0.5f, -0.01f, 100),    zAxisColor),
-            new VertexPositionColor(new Vector3(0.5f, -100, 0.5f),   yAxisColor),    // Red
+            new VertexPositionColor(new Vector3(0.5f, -100, 0.5f),   yAxisColor),    // Blue
             new VertexPositionColor(new Vector3(0.5f, 100, 0.5f),    yAxisColor) 
         };
 
-        _vertices = new VertexPositionColor[8]
-        {
-            new VertexPositionColor(new Vector3(0,0,0), obj_color),
-            new VertexPositionColor(new Vector3(0,1,0), obj_color),
-            new VertexPositionColor(new Vector3(1,1,0), obj_color),
-            new VertexPositionColor(new Vector3(1,0,0), obj_color),
-            new VertexPositionColor(new Vector3(0,0,1), obj_color),
-            new VertexPositionColor(new Vector3(0,1,1), obj_color),
-            new VertexPositionColor(new Vector3(1,1,1), obj_color),
-            new VertexPositionColor(new Vector3(1,0,1), obj_color)
-        };
-
-        _indices = new short[]
-        {
-            0, 1, 2, // south
-            0, 2, 3,
-
-            3, 2, 6, // east
-            3, 6, 7,
-
-            7, 6, 5, // north
-            7, 5, 4,
-
-            4, 5, 1, // west
-            4, 1, 0,
-
-            1, 5, 6, // top
-            1, 6, 2,
-
-            0, 7, 4, // bottom
-            0, 3, 7
-        };
+        
 
         _view = Matrix.CreateLookAt
         (
@@ -256,6 +229,8 @@ public class Game1 : Game
         _spriteBatch.DrawString(ui_font, $"Cursor Position ({mouseX}, {mouseY})", new Vector2(10, 50), Color.White);
         _spriteBatch.DrawString(ui_font, $"Delta (X:{deltaX}, Y:{deltaY})", new Vector2(10, 70), Color.White);
         _spriteBatch.DrawString(ui_font, $"MMB held: {MMBstatus}", new Vector2(10, 90), Color.White);
+        _spriteBatch.DrawString(ui_font, $"phi value: {phi}", new Vector2(10, 110), Color.White);
+        _spriteBatch.DrawString(ui_font, $"theta value: {theta}", new Vector2(10, 130), Color.White);
         _spriteBatch.End();
 
         //relativeMousePos = Vector2.transform(MousePos, Matrix.Invert(transformMatrix));
@@ -269,12 +244,12 @@ public class Game1 : Game
             GraphicsDevice.DrawUserIndexedPrimitives
             (
                 PrimitiveType.TriangleList,
-                _vertices,
+                cube._vertices,
                 0,
-                _vertices.Length,
-                _indices,
+                cube._vertices.Length,
+                cube._indices,
                 0,
-                _indices.Length / 3
+                cube._indices.Length / 3
             );
 
             GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, _axisVertices, 0, 2); //change 2->3 if I want y-axis to be displayed.
