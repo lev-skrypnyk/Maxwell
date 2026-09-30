@@ -19,12 +19,14 @@ public class Game1 : Game
 
     SpriteFont ui_font;
     
-    private Color bg_color = new Color(34,34,34);
+    private Color bg_color = new Color(25, 25, 25); //34
     private Color obj_color = new Color(160, 160, 160);
+    private Color grid_Color = new Color(60, 60, 60);//87
 
-    private Color zAxisColor = new Color(150, 60, 75);  //red
     private Color xAxisColor = new Color(100, 130, 50); //green
-    private Color yAxisColor = new Color(50, 135, 235); //blue
+    private Color yAxisColor = new Color(150, 60, 75);  //red
+    private Color zAxisColor = new Color(50, 135, 235); //blue
+    
 
     int w_width;
     int w_height;
@@ -70,6 +72,7 @@ public class Game1 : Game
     private bool MMBstatus;
 
     Cube cube;
+    PerspectiveGrid grid;
 
     public Game1()
     {
@@ -87,6 +90,7 @@ public class Game1 : Game
 
         w_width = GraphicsDevice.Viewport.Width;
         w_height = GraphicsDevice.Viewport.Height;
+        aspect_ratio = (float)w_width / w_height;
 
         cameraPosition = new Vector3(4, 4, 4);
         cameraTarget = new Vector3(0.5f, 0.5f, 0.5f);
@@ -107,9 +111,8 @@ public class Game1 : Game
 
         MMBstatus = false;
 
-        aspect_ratio = (float)w_width / w_height;
-
         cube = new Cube(obj_color);
+        grid = new PerspectiveGrid(grid_Color);
 
         //_perspectiveGridVertices = new VertexPositionColor[]
 
@@ -253,6 +256,8 @@ public class Game1 : Game
             );
 
             GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, _axisVertices, 0, 2); //change 2->3 if I want y-axis to be displayed.
+
+            GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, grid._gridVertices, 0, 64);
         }
 
         base.Draw(gameTime);
