@@ -26,7 +26,8 @@ public class Game1 : Game
     private Color xAxisColor = new Color(100, 130, 50); //green
     private Color yAxisColor = new Color(150, 60, 75);  //red
     private Color zAxisColor = new Color(50, 135, 235); //blue
-    
+
+    RasterizerState wireframeState;
 
     int w_width;
     int w_height;
@@ -88,6 +89,9 @@ public class Game1 : Game
         _graphics.PreferredBackBufferHeight = 720;
         _graphics.ApplyChanges();
 
+        wireframeState = new RasterizerState();
+        wireframeState.FillMode = FillMode.WireFrame;
+
         w_width = GraphicsDevice.Viewport.Width;
         w_height = GraphicsDevice.Viewport.Height;
         aspect_ratio = (float)w_width / w_height;
@@ -118,12 +122,12 @@ public class Game1 : Game
 
         _axisVertices = new VertexPositionColor[6]
         {
-            new VertexPositionColor(new Vector3(-100, -0.01f, 0.5f),  xAxisColor),    // Green
-            new VertexPositionColor(new Vector3(100, -0.01f, 0.5f),   xAxisColor),  
-            new VertexPositionColor(new Vector3(0.5f, -0.01f, -100),   zAxisColor),    // Red
-            new VertexPositionColor(new Vector3(0.5f, -0.01f, 100),    zAxisColor),
-            new VertexPositionColor(new Vector3(0.5f, -100, 0.5f),   yAxisColor),    // Blue
-            new VertexPositionColor(new Vector3(0.5f, 100, 0.5f),    yAxisColor) 
+            new VertexPositionColor(new Vector3(-15, -0.01f, 0.5f),  xAxisColor),    // Green
+            new VertexPositionColor(new Vector3(15, -0.01f, 0.5f),   xAxisColor),  
+            new VertexPositionColor(new Vector3(0.5f, -0.01f, -15),   zAxisColor),    // Red
+            new VertexPositionColor(new Vector3(0.5f, -0.01f, 15),    zAxisColor),
+            new VertexPositionColor(new Vector3(0.5f, -15, 0.5f),   yAxisColor),    // Blue
+            new VertexPositionColor(new Vector3(0.5f, 15, 0.5f),    yAxisColor) 
         };
 
         
@@ -205,6 +209,10 @@ public class Game1 : Game
             PreviousMouseX = mouseX;
             PreviousMouseY = mouseY;
         }
+
+        if(mouseState.LeftButton == ButtonState.Pressed)
+            obj_color = new Color(120, 120, 120);
+
         previousMiddleButtonState = mouseState.MiddleButton;
 
         cameraPosition += movement;
@@ -239,6 +247,7 @@ public class Game1 : Game
         //relativeMousePos = Vector2.transform(MousePos, Matrix.Invert(transformMatrix));
 
         GraphicsDevice.DepthStencilState = DepthStencilState.Default; //fixes problem where axis-lines get seen through the cube because of _spriteBatch.Begin and _spriteBatch.Begin.
+        //GraphicsDevice.RasterizerState = wireframeState;
 
         foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
         {
