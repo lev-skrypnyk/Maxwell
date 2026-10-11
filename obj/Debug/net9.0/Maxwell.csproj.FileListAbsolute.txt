@@ -38,3 +38,6 @@ D:\code\monogame\Maxwell\obj\Debug\net9.0\Maxwell.sourcelink.json
 D:\code\monogame\Maxwell\bin\Debug\net9.0\Content\MainFont.xnb
 D:\code\monogame\Maxwell\bin\Debug\net9.0\Content\ui_add_cube.xnb
 D:\code\monogame\Maxwell\bin\Debug\net9.0\Content\ui_add_object.xnb
+D:\code\monogame\Maxwell\bin\Debug\net9.0\Content\ui_add.xnb
+D:\code\monogame\Maxwell\bin\Debug\net9.0\Content\ui_select.xnb
+D:\code\monogame\Maxwell\bin\Debug\net9.0\Content\ui_view.xnb

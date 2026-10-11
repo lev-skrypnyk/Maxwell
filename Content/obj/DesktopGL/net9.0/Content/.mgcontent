@@ -6,8 +6,14 @@
   <SourceFiles>
     <File>D:/code/monogame/Maxwell/Content/ui_add_cube.png</File>
     <File>D:/code/monogame/Maxwell/Content/ui_add_object.png</File>
+    <File>D:/code/monogame/Maxwell/Content/ui_add.png</File>
+    <File>D:/code/monogame/Maxwell/Content/ui_select.png</File>
+    <File>D:/code/monogame/Maxwell/Content/ui_view.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>

@@ -64,9 +64,13 @@ public class Game1 : Game
     private float theta; //horizontal rotation
     private float phi;
 
-    private Button b_add_cube;
+    private Button b_view;
+    private Button b_select;
+    private Button b_add;
+
     private Panel p_properties_hierarchy;
     private Texture2D pixel;
+    private Panel p_tool_bar;
 
     ButtonState previousMiddleButtonState = ButtonState.Released;
 
@@ -198,9 +202,13 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        ui_font = Content.Load<SpriteFont>("MainFont");
-        b_add_cube = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_add_cube.png"), new(350, 10), 72, 24, true);
-        p_properties_hierarchy = new(pixel, new(w_width - 350, 0), 350, w_height, true, panel_color);
+        ui_font = Content.Load<SpriteFont>("MainFont"); // *0.825
+        b_view = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319
+        b_select = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319
+        b_add = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319
+
+        p_properties_hierarchy = new(pixel, new(w_width - 325, 0), 325, w_height, true, panel_color);
+        p_tool_bar = new(pixel, new(0,0), w_width - 325, 35, true, panel_color);
 
         // TODO: use this.Content to load your game content here
     }
@@ -210,7 +218,9 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        b_add_cube.Update();
+        b_view.Update();
+        b_select.Update();
+        b_add.Update();
 
         movement = Vector3.Zero;
         MMBstatus = false;
@@ -295,20 +305,25 @@ public class Game1 : Game
 
         _spriteBatch.Begin();
 
-        b_add_cube.Draw(_spriteBatch);
         p_properties_hierarchy.Draw(_spriteBatch);
+        p_tool_bar.Draw(_spriteBatch);
+        b_view.Draw(_spriteBatch);
+        b_select.Draw(_spriteBatch);
+        b_add.Draw(_spriteBatch);
         // X, Y, Z
-        _spriteBatch.DrawString(ui_font, $"X", new Vector2(10, 10), xAxisColor);
-        _spriteBatch.DrawString(ui_font, $"Y", new Vector2(25, 10), yAxisColor);
-        _spriteBatch.DrawString(ui_font, $"Z", new Vector2(40, 10), zAxisColor);
 
-
+        /*
+        _spriteBatch.DrawString(ui_font, $"X", new Vector2(10, 12), xAxisColor);
+        _spriteBatch.DrawString(ui_font, $"Y", new Vector2(25, 12), yAxisColor);
+        _spriteBatch.DrawString(ui_font, $"Z", new Vector2(40, 12), zAxisColor);
+        
         _spriteBatch.DrawString(ui_font, $"Camera Position ({Math.Round(cameraPosition.X, 2)}, {Math.Round(cameraPosition.Y, 2)}, {Math.Round(cameraPosition.Z, 2)})", new Vector2(10, 30), Color.White);
         _spriteBatch.DrawString(ui_font, $"Cursor Position ({mouseX}, {mouseY})", new Vector2(10, 50), Color.White);
         _spriteBatch.DrawString(ui_font, $"Delta (X:{deltaX}, Y:{deltaY})", new Vector2(10, 70), Color.White);
         _spriteBatch.DrawString(ui_font, $"MMB held: {MMBstatus}", new Vector2(10, 90), Color.White);
         _spriteBatch.DrawString(ui_font, $"phi value: {phi}", new Vector2(10, 110), Color.White);
         _spriteBatch.DrawString(ui_font, $"theta value: {theta}", new Vector2(10, 130), Color.White);
+        */
 
         _spriteBatch.End();
 
