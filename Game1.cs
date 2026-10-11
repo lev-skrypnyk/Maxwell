@@ -63,6 +63,8 @@ public class Game1 : Game
     private float theta; //horizontal rotation
     private float phi;
 
+    private Button b_add_cube;
+
     ButtonState previousMiddleButtonState = ButtonState.Released;
 
     private float mouseSensitivity;
@@ -192,6 +194,7 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         ui_font = Content.Load<SpriteFont>("MainFont");
+        b_add_cube = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_add_cube.png"), new(350, 10), 72, 24, true);
 
         // TODO: use this.Content to load your game content here
     }
@@ -200,6 +203,8 @@ public class Game1 : Game
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
+
+        b_add_cube.Update();
 
         movement = Vector3.Zero;
         MMBstatus = false;
@@ -256,24 +261,8 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(bg_color);
 
-        _spriteBatch.Begin();
-
-        // X, Y, Z
-        _spriteBatch.DrawString(ui_font, $"X", new Vector2(10, 10), xAxisColor);
-        _spriteBatch.DrawString(ui_font, $"Y", new Vector2(25, 10), yAxisColor);
-        _spriteBatch.DrawString(ui_font, $"Z", new Vector2(40, 10), zAxisColor);
-
-
-        _spriteBatch.DrawString(ui_font, $"Camera Position ({Math.Round(cameraPosition.X, 2)}, {Math.Round(cameraPosition.Y, 2)}, {Math.Round(cameraPosition.Z, 2)})", new Vector2(10, 30), Color.White);
-        _spriteBatch.DrawString(ui_font, $"Cursor Position ({mouseX}, {mouseY})", new Vector2(10, 50), Color.White);
-        _spriteBatch.DrawString(ui_font, $"Delta (X:{deltaX}, Y:{deltaY})", new Vector2(10, 70), Color.White);
-        _spriteBatch.DrawString(ui_font, $"MMB held: {MMBstatus}", new Vector2(10, 90), Color.White);
-        _spriteBatch.DrawString(ui_font, $"phi value: {phi}", new Vector2(10, 110), Color.White);
-        _spriteBatch.DrawString(ui_font, $"theta value: {theta}", new Vector2(10, 130), Color.White);
-        _spriteBatch.End();
 
         //relativeMousePos = Vector2.transform(MousePos, Matrix.Invert(transformMatrix));
-
         GraphicsDevice.DepthStencilState = DepthStencilState.Default; //fixes problem where axis-lines get seen through the cube because of _spriteBatch.Begin and _spriteBatch.Begin.
         //GraphicsDevice.RasterizerState = wireframeState;
 
@@ -296,6 +285,25 @@ public class Game1 : Game
 
             GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, grid._gridVertices, 0, 64);
         }
+
+
+        _spriteBatch.Begin();
+
+        b_add_cube.Draw(_spriteBatch);
+        // X, Y, Z
+        _spriteBatch.DrawString(ui_font, $"X", new Vector2(10, 10), xAxisColor);
+        _spriteBatch.DrawString(ui_font, $"Y", new Vector2(25, 10), yAxisColor);
+        _spriteBatch.DrawString(ui_font, $"Z", new Vector2(40, 10), zAxisColor);
+
+
+        _spriteBatch.DrawString(ui_font, $"Camera Position ({Math.Round(cameraPosition.X, 2)}, {Math.Round(cameraPosition.Y, 2)}, {Math.Round(cameraPosition.Z, 2)})", new Vector2(10, 30), Color.White);
+        _spriteBatch.DrawString(ui_font, $"Cursor Position ({mouseX}, {mouseY})", new Vector2(10, 50), Color.White);
+        _spriteBatch.DrawString(ui_font, $"Delta (X:{deltaX}, Y:{deltaY})", new Vector2(10, 70), Color.White);
+        _spriteBatch.DrawString(ui_font, $"MMB held: {MMBstatus}", new Vector2(10, 90), Color.White);
+        _spriteBatch.DrawString(ui_font, $"phi value: {phi}", new Vector2(10, 110), Color.White);
+        _spriteBatch.DrawString(ui_font, $"theta value: {theta}", new Vector2(10, 130), Color.White);
+
+        _spriteBatch.End();
 
         base.Draw(gameTime);
     }

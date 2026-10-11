@@ -1,1 +1,3 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"d:/code/monogame/Maxwell/Content/ui_add_cube.png","d:/code/monogame/Maxwell/Content/bin/DesktopGL/ui_add_cube.xnb","TextureProcessor","Texture2DContent",19200,1236529,0.1169114
+"d:/code/monogame/Maxwell/Content/ui_add_object.png","d:/code/monogame/Maxwell/Content/bin/DesktopGL/ui_add_object.xnb","TextureProcessor","Texture2DContent",22979,1520565,0.1413956
