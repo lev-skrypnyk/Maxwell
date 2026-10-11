@@ -72,8 +72,9 @@ public class Game1 : Game
 
     private bool MMBstatus;
 
-    Cube cube;
     PerspectiveGrid grid;
+
+    SceneObject cube;
 
     public Game1()
     {
@@ -85,8 +86,8 @@ public class Game1 : Game
     protected override void Initialize()
     {
         //_graphics.IsFullScreen = false;
-        _graphics.PreferredBackBufferWidth = 1280;
-        _graphics.PreferredBackBufferHeight = 720;
+        _graphics.PreferredBackBufferWidth = 1600;
+        _graphics.PreferredBackBufferHeight = 900;
         _graphics.ApplyChanges();
 
         wireframeState = new RasterizerState();
@@ -115,8 +116,37 @@ public class Game1 : Game
 
         MMBstatus = false;
 
-        cube = new Cube(obj_color);
         grid = new PerspectiveGrid(grid_Color);
+
+
+        // scene objects initialization
+        cube = new SceneObject();
+        cube.geometry.AddRange(new[]
+        {
+            new VertexPositionColor(new Vector3(0,0,0), obj_color),
+            new VertexPositionColor(new Vector3(0,1,0), obj_color),
+            new VertexPositionColor(new Vector3(1,1,0), obj_color),
+            new VertexPositionColor(new Vector3(1,0,0), obj_color),
+            new VertexPositionColor(new Vector3(0,0,1), obj_color),
+            new VertexPositionColor(new Vector3(0,1,1), obj_color),
+            new VertexPositionColor(new Vector3(1,1,1), obj_color),
+            new VertexPositionColor(new Vector3(1,0,1), obj_color)
+        });
+        cube.indices.AddRange(new[]
+        {
+            0, 1, 2, // south 
+            0, 2, 3,
+            3, 2, 6, // east
+            3, 6, 7,
+            7, 6, 5, // north
+            7, 5, 4,
+            4, 5, 1, // west
+            4, 1, 0,
+            1, 5, 6, // top
+            1, 6, 2,
+            0, 7, 4, // bottom
+            0, 3, 7
+        });
 
         //_perspectiveGridVertices = new VertexPositionColor[]
 
@@ -129,8 +159,6 @@ public class Game1 : Game
             new VertexPositionColor(new Vector3(0.5f, -15, 0.5f),   yAxisColor),    // Blue
             new VertexPositionColor(new Vector3(0.5f, 15, 0.5f),    yAxisColor) 
         };
-
-        
 
         _view = Matrix.CreateLookAt
         (
@@ -256,12 +284,12 @@ public class Game1 : Game
             GraphicsDevice.DrawUserIndexedPrimitives
             (
                 PrimitiveType.TriangleList,
-                cube._vertices,
+                cube.geometry.ToArray(),
                 0,
-                cube._vertices.Length,
-                cube._indices,
+                cube.geometry.Count,
+                cube.indices.ToArray(),
                 0,
-                cube._indices.Length / 3
+                cube.indices.Count / 3
             );
 
             GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, _axisVertices, 0, 2); //change 2->3 if I want y-axis to be displayed.

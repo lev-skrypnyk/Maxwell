@@ -13,18 +13,18 @@ class SceneObject
     private Vector3 rotation;
     private Vector3 scale;
 
-    private List<Vector3> vertices = new List<Vector3>();
+    public List<VertexPositionColor> geometry = new List<VertexPositionColor>();
+    public List<int> indices = new List<int>();
 
     protected string object_name;
     protected Color object_color;
 
-    public SceneObject(Color object_color)
+    public SceneObject()
     {
         position = Vector3.Zero;
         rotation = Vector3.Zero;
         scale = Vector3.One;
-
-        this.object_color = object_color;
+        object_color = new Color(160, 160, 160);
     }
 
     protected void SetPosition(Vector3 object_pos)
@@ -48,7 +48,7 @@ class SceneObject
         scale.Z = object_scl.Z;
     }
 }   
-
+/*
 class Cube
 {
 
@@ -88,3 +88,4 @@ class Cube
 
     
 }
+*/
