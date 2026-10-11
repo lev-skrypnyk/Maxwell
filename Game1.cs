@@ -21,7 +21,8 @@ public class Game1 : Game
     
     private Color bg_color = new Color(25, 25, 25); //34
     private Color obj_color = new Color(160, 160, 160);
-    private Color grid_Color = new Color(60, 60, 60);//87
+    private Color grid_color = new Color(60, 60, 60);//87
+    private Color panel_color = new Color(35, 35, 35);
 
     private Color xAxisColor = new Color(100, 130, 50); //green
     private Color yAxisColor = new Color(150, 60, 75);  //red
@@ -64,6 +65,8 @@ public class Game1 : Game
     private float phi;
 
     private Button b_add_cube;
+    private Panel p_properties_hierarchy;
+    private Texture2D pixel;
 
     ButtonState previousMiddleButtonState = ButtonState.Released;
 
@@ -118,8 +121,10 @@ public class Game1 : Game
 
         MMBstatus = false;
 
-        grid = new PerspectiveGrid(grid_Color);
+        grid = new PerspectiveGrid(grid_color);
 
+        pixel = new Texture2D(GraphicsDevice, 1, 1);
+        pixel.SetData(new[] {Color.White});
 
         // scene objects initialization
         cube = new SceneObject();
@@ -195,6 +200,7 @@ public class Game1 : Game
 
         ui_font = Content.Load<SpriteFont>("MainFont");
         b_add_cube = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_add_cube.png"), new(350, 10), 72, 24, true);
+        p_properties_hierarchy = new(pixel, new(w_width - 350, 0), 350, w_height, true, panel_color);
 
         // TODO: use this.Content to load your game content here
     }
@@ -290,6 +296,7 @@ public class Game1 : Game
         _spriteBatch.Begin();
 
         b_add_cube.Draw(_spriteBatch);
+        p_properties_hierarchy.Draw(_spriteBatch);
         // X, Y, Z
         _spriteBatch.DrawString(ui_font, $"X", new Vector2(10, 10), xAxisColor);
         _spriteBatch.DrawString(ui_font, $"Y", new Vector2(25, 10), yAxisColor);
