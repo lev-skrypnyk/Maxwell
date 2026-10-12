@@ -23,6 +23,7 @@ public class Game1 : Game
     private Color obj_color = new Color(160, 160, 160);
     private Color grid_color = new Color(60, 60, 60);//87
     private Color panel_color = new Color(35, 35, 35);
+    private Color selection_color = new Color(232, 125, 13);
 
     private Color xAxisColor = new Color(100, 130, 50); //green
     private Color yAxisColor = new Color(150, 60, 75);  //red
@@ -260,7 +261,9 @@ public class Game1 : Game
         }
 
         if(mouseState.LeftButton == ButtonState.Pressed)
-            cube.ChangeColor(zAxisColor);
+        {
+            cube.ChangeColor(selection_color);
+        }
 
         previousMiddleButtonState = mouseState.MiddleButton;
 
@@ -269,8 +272,6 @@ public class Game1 : Game
 
         _view = Matrix.CreateLookAt(cameraPosition, cameraTarget, cameraUp);
         _effect.View = _view;
-
-        
 
         base.Update(gameTime);
     }
@@ -306,7 +307,7 @@ public class Game1 : Game
         }
 
 
-        _spriteBatch.Begin();
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         
         p_properties_hierarchy.Draw(_spriteBatch);
         p_tool_bar.Draw(_spriteBatch);

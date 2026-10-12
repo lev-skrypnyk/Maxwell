@@ -15,15 +15,15 @@ class PerspectiveGrid
         for(float diff = -lengthOfGrid; diff <= lengthOfGrid; diff += 1.0f)
         {
             // y-axis
-            _gridVertices[index] = new VertexPositionColor(new Vector3(-lengthOfGrid, -verticalOffset, diff),  grid_color);
+            _gridVertices[index] = new VertexPositionColor(new Vector3(-lengthOfGrid, verticalOffset, diff),  grid_color);
             index++;
-            _gridVertices[index] = new VertexPositionColor(new Vector3(lengthOfGrid, -verticalOffset, diff),  grid_color);
+            _gridVertices[index] = new VertexPositionColor(new Vector3(lengthOfGrid, verticalOffset, diff),  grid_color);
             index++;
 
             // x-axis
-            _gridVertices[index] = new VertexPositionColor(new Vector3(diff, -verticalOffset, -lengthOfGrid),  grid_color);
+            _gridVertices[index] = new VertexPositionColor(new Vector3(diff, verticalOffset, -lengthOfGrid),  grid_color);
             index++;
-            _gridVertices[index] = new VertexPositionColor(new Vector3(diff, -verticalOffset, lengthOfGrid),  grid_color);
+            _gridVertices[index] = new VertexPositionColor(new Vector3(diff, verticalOffset, lengthOfGrid),  grid_color);
             index++;
         }
     
