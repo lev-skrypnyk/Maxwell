@@ -204,9 +204,9 @@ public class Game1 : Game
 
         ui_font = Content.Load<SpriteFont>("MainFont");
         //0.825
-        b_view = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319 D:/code/monogame/Maxwell/Content/ui_view.png
-        b_select = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319 D:/code/monogame/Maxwell/Content/ui_select.png
-        b_add = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319 D:/code/monogame/Maxwell/Content/ui_add.png
+        b_view = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
+        b_select = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png
+        b_add = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png
 
         p_properties_hierarchy = new(pixel, new(w_width - 325, 0), 325, w_height, true, panel_color);
         p_tool_bar = new(pixel, new(0,0), w_width - 325, 35, true, panel_color);
@@ -260,7 +260,7 @@ public class Game1 : Game
         }
 
         if(mouseState.LeftButton == ButtonState.Pressed)
-            obj_color = new Color(120, 120, 120);
+            cube.ChangeColor(zAxisColor);
 
         previousMiddleButtonState = mouseState.MiddleButton;
 
@@ -269,6 +269,8 @@ public class Game1 : Game
 
         _view = Matrix.CreateLookAt(cameraPosition, cameraTarget, cameraUp);
         _effect.View = _view;
+
+        
 
         base.Update(gameTime);
     }
@@ -286,6 +288,9 @@ public class Game1 : Game
         {
             pass.Apply();
 
+            GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, _axisVertices, 0, 2); //change 2->3 if I want y-axis to be displayed.
+            GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, grid._gridVertices, 0, 64);
+
             GraphicsDevice.DrawUserIndexedPrimitives
             (
                 PrimitiveType.TriangleList,
@@ -297,9 +302,7 @@ public class Game1 : Game
                 cube.indices.Count / 3
             );
 
-            GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, _axisVertices, 0, 2); //change 2->3 if I want y-axis to be displayed.
-
-            GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, grid._gridVertices, 0, 64);
+            
         }
 
 

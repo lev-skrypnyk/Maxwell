@@ -27,25 +27,35 @@ class SceneObject
         object_color = new Color(160, 160, 160);
     }
 
-    protected void SetPosition(Vector3 object_pos)
+    public void SetPosition(Vector3 object_pos)
     {   
         position.X = object_pos.X;
         position.Y = object_pos.X;
         position.Z = object_pos.X;
     }
 
-    protected void ChangeRotation(Vector3 object_rot)
+    public void ChangeRotation(Vector3 object_rot)
     {
         rotation.X = object_rot.X;
         rotation.Y = object_rot.Y;
         rotation.Z = object_rot.Z;
     }
 
-    protected void ChangeScale(Vector3 object_scl)
+    public void ChangeScale(Vector3 object_scl)
     {
         scale.X = object_scl.X;
         scale.Y = object_scl.Y;
         scale.Z = object_scl.Z;
+    }
+
+    public void ChangeColor(Color new_color)
+    {
+        for(int i = 0; i < geometry.Count; i++)
+        {
+            VertexPositionColor vertex = geometry[i];
+            vertex.Color = new_color;
+            geometry[i] = vertex;
+        }
     }
 }   
 /*
