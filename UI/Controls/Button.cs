@@ -25,7 +25,7 @@ public class Button : UIElement
 
         if(cursor.Intersects(rect))
         {
-            shade = Color.LightGray;
+            shade = Color.Aqua;
             if(ms.LeftButton == ButtonState.Pressed && last_mouse_state.LeftButton == ButtonState.Released)
             {
                 
