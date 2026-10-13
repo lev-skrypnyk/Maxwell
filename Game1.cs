@@ -179,13 +179,8 @@ public class Game1 : Game
         cameraUp
         );
 
-        _projection = Matrix.CreatePerspectiveFieldOfView
-        (
-            (float)(45.0f * (Math.PI / 180)),
-            aspect_ratio,
-            0.1f,
-            100.0f
-        );
+        //Matrix.CreateOrthographic(w_width, w_height, 0f, 1000f);
+        _projection = Matrix.CreatePerspectiveFieldOfView((float)(45.0f * (Math.PI / 180)), aspect_ratio, 0.1f, 100.0f);
 
         _world = Matrix.Identity;
 
@@ -205,9 +200,12 @@ public class Game1 : Game
 
         ui_font = Content.Load<SpriteFont>("MainFont");
         //0.825
-        b_view = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
-        b_select = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png
-        b_add = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png
+        b_view = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
+        b_select = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png
+        b_add = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png
+        
+        //C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
+        //D:/code/monogame/Maxwell/Content/ui_add.pngd
 
         p_properties_hierarchy = new(pixel, new(w_width - 325, 0), 325, w_height, true, panel_color);
         p_tool_bar = new(pixel, new(0,0), w_width - 325, 35, true, panel_color);
@@ -264,6 +262,12 @@ public class Game1 : Game
         {
             cube.ChangeColor(selection_color);
         }
+
+        if(keyboardState.IsKeyDown(Keys.O))
+        {
+            _projection = Matrix.CreateOrthographic(w_width, w_height, 0f, 1000f);
+        }
+            
 
         previousMiddleButtonState = mouseState.MiddleButton;
 
