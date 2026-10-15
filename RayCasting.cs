@@ -21,14 +21,20 @@ public class RayCast
 
     public Matrix world;
     public Matrix view;
+    public Matrix projection;
 
     private Vector3 nearsource;
     private Vector3 farsource;
 
-    public RayCast(Matrix World, Matrix View)
+    private Vector3 nearPoint; 
+    private Vector3 farPoint; 
+
+
+    public RayCast(Matrix World, Matrix View, Matrix Projection)
     {
         world = World;
         view = View;
+        projection = Projection;
     }
 
     public void Update(MouseState MS, int MouseX, int MouseY)
@@ -37,4 +43,11 @@ public class RayCast
         mouseX = MouseX;
         mouseY = MouseY;
     }
+
+    public void Draw(GraphicsDevice gd)
+    {
+        nearPoint = gd.Viewport.Unproject(nearsource, projection, view, world);
+        farPoint = gd.Viewport.Unproject(farsource, projection, view, world);
+    }
+
 }
