@@ -55,6 +55,7 @@ public class Game1 : Game
 
     // mouse
     private MouseState mouseState;
+    private MouseState previousMouseState;
     private int mouseX;
     private int mouseY;
     private int PreviousMouseX;
@@ -68,6 +69,8 @@ public class Game1 : Game
     private Button b_view;
     private Button b_select;
     private Button b_add;
+
+    private float FOV;
 
     private Panel p_properties_hierarchy;
     private Texture2D pixel;
@@ -85,6 +88,8 @@ public class Game1 : Game
     PerspectiveGrid grid;
 
     SceneObject cube;
+
+    Camera camera;
 
     public Game1()
     {
@@ -111,6 +116,8 @@ public class Game1 : Game
         cameraTarget = new Vector3(0.5f, 0.5f, 0.5f);
         cameraUp = new Vector3(0, 1, 0);
 
+        FOV = 45.0f;
+
         movement = Vector3.Zero;
         cameraSpeed = 0.015f;
 
@@ -118,6 +125,7 @@ public class Game1 : Game
 
         radius = Vector3.Distance(cameraTarget, cameraPosition);
 
+        previousMouseState = Mouse.GetState();
         PreviousMouseX = 0;
         PreviousMouseY = 0;
         deltaX = 0;
@@ -127,6 +135,8 @@ public class Game1 : Game
         MMBstatus = false;
 
         grid = new PerspectiveGrid(grid_color);
+
+        camera = new Camera();
 
         pixel = new Texture2D(GraphicsDevice, 1, 1);
         pixel.SetData(new[] {Color.White});
@@ -180,7 +190,7 @@ public class Game1 : Game
         );
 
         //Matrix.CreateOrthographic(w_width, w_height, 0f, 1000f);
-        _projection = Matrix.CreatePerspectiveFieldOfView((float)(45.0f * (Math.PI / 180)), aspect_ratio, 0.1f, 100.0f);
+        _projection = Matrix.CreatePerspectiveFieldOfView((float)(FOV * (Math.PI / 180)), aspect_ratio, 0.1f, 100.0f);
 
         _world = Matrix.Identity;
 
@@ -200,9 +210,9 @@ public class Game1 : Game
 
         ui_font = Content.Load<SpriteFont>("MainFont");
         //0.825
-        b_view = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
-        b_select = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png
-        b_add = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png
+        b_view = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
+        b_select = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png
+        b_add = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png
         
         //C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
         //D:/code/monogame/Maxwell/Content/ui_add.pngd
@@ -217,46 +227,26 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+        keyboardState = Keyboard.GetState();
+        mouseState = Mouse.GetState();
+
         b_view.Update();
         b_select.Update();
         b_add.Update();
 
-        movement = Vector3.Zero;
-        MMBstatus = false;
-        zoomMultiplier = 1.0f;
+        camera.Update(mouseState, mouseState.X, mouseState.Y);
 
-        keyboardState = Keyboard.GetState();
-        mouseState = Mouse.GetState();
+        int mouse_scroll_delta = mouseState.ScrollWheelValue - previousMouseState.ScrollWheelValue;
 
         mouseX = mouseState.X;
         mouseY = mouseState.Y;
 
-        if(mouseState.MiddleButton == ButtonState.Pressed)
-        {
-            MMBstatus = true;
-            if(previousMiddleButtonState == ButtonState.Released)
-            {
-                PreviousMouseX = mouseX;
-                PreviousMouseY = mouseY;
-            }
-            else
-            {
-                deltaX = (mouseX - PreviousMouseX) * -1;
-                deltaY = mouseY - PreviousMouseY; // as mouse moves up, the value of y increases
-            
-                theta += deltaX * mouseSensitivity;
-                phi += deltaY * mouseSensitivity;
+        if(mouse_scroll_delta < 0)
+            FOV += 2f;       
+        else if(mouse_scroll_delta > 0)
+            FOV -= 2f;
 
-            }
-
-            //spherical coordinates maths converion
-            cameraPosition.X = (float)(radius * Math.Cos(phi * (Math.PI / 180)) * Math.Sin(theta * (Math.PI / 180)));
-            cameraPosition.Y = (float)(radius * Math.Sin(phi * (Math.PI / 180)));
-            cameraPosition.Z = (float)(radius * Math.Cos(phi * (Math.PI / 180)) * Math.Cos(theta * (Math.PI / 180)));
-
-            PreviousMouseX = mouseX;
-            PreviousMouseY = mouseY;
-        }
+        cameraPosition = camera.Orbiting(cameraPosition);
 
         if(mouseState.LeftButton == ButtonState.Pressed)
         {
@@ -267,15 +257,12 @@ public class Game1 : Game
         {
             _projection = Matrix.CreateOrthographic(w_width, w_height, 0f, 1000f);
         }
-            
-
-        previousMiddleButtonState = mouseState.MiddleButton;
-
-        cameraPosition += movement;
-        cameraTarget += movement;
 
         _view = Matrix.CreateLookAt(cameraPosition, cameraTarget, cameraUp);
         _effect.View = _view;
+
+        _projection = Matrix.CreatePerspectiveFieldOfView((float)(FOV * (Math.PI / 180)), aspect_ratio, 0.1f, 100.0f);
+        _effect.Projection = _projection;
 
         base.Update(gameTime);
     }
@@ -333,8 +320,8 @@ public class Game1 : Game
         _spriteBatch.DrawString(ui_font, $"Delta (X:{deltaX}, Y:{deltaY})", new Vector2(10, 70), Color.White);
         _spriteBatch.DrawString(ui_font, $"MMB held: {MMBstatus}", new Vector2(10, 90), Color.White);
         _spriteBatch.DrawString(ui_font, $"phi value: {phi}", new Vector2(10, 110), Color.White);
-        _spriteBatch.DrawString(ui_font, $"theta value: {theta}", new Vector2(10, 130), Color.White);
         */
+        _spriteBatch.DrawString(ui_font, $"radius value: {radius}", new Vector2(10, 130), Color.White);
 
         _spriteBatch.End();
 

@@ -53,8 +53,8 @@ public class RayCast
         
         pickRay = new Ray(nearPoint, direction);
 
-        float? distance = pickRay.Intersects()
-        if (distance.HasValue)
+        //float? distance = pickRay.Intersects()
+        //if (distance.HasValue)
         {
             
         }
