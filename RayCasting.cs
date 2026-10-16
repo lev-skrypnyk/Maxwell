@@ -27,7 +27,9 @@ public class RayCast
     private Vector3 farsource;
 
     private Vector3 nearPoint; 
-    private Vector3 farPoint; 
+    private Vector3 farPoint;
+
+    Ray pickRay;
 
 
     public RayCast(Matrix World, Matrix View, Matrix Projection)
@@ -42,6 +44,20 @@ public class RayCast
         ms = MS;
         mouseX = MouseX;
         mouseY = MouseY;
+
+        nearPoint = new Vector3((float)mouseX, (float)mouseY, 0f);
+        farPoint = new Vector3((float)mouseX, (float)mouseY, 1f);
+        
+        Vector3 direction = farPoint - nearPoint;
+        direction.Normalize();
+        
+        pickRay = new Ray(nearPoint, direction);
+
+        float? distance = pickRay.Intersects()
+        if (distance.HasValue)
+        {
+            
+        }
     }
 
     public void Draw(GraphicsDevice gd)
