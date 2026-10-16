@@ -43,9 +43,6 @@ public class Camera
 
     public Vector3 Orbiting(Vector3 cameraPosition)
     {
-        //mouseState = Mouse.GetState();
-        //mouseX = mouseState.X;
-        //mouseY = mouseState.Y;
 
         if(mouseState.MiddleButton == ButtonState.Pressed)
         {
@@ -76,5 +73,19 @@ public class Camera
         previousMiddleButtonState = mouseState.MiddleButton;
 
         return new Vector3(cameraPosition.X, cameraPosition.Y, cameraPosition.Z);
+    }
+
+    public float Zoom(float FOV)
+    {
+        int mouse_scroll_delta = mouseState.ScrollWheelValue - previousMouseState.ScrollWheelValue;
+
+        if(mouse_scroll_delta < 0)
+            FOV += 5f;       
+        else if(mouse_scroll_delta > 0)
+            FOV -= 5f;
+
+        previousMouseState = mouseState;
+
+        return FOV;
     }
 }

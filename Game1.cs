@@ -63,9 +63,6 @@ public class Game1 : Game
     private int deltaX;
     private int deltaY;
 
-    private float theta; //horizontal rotation
-    private float phi;
-
     private Button b_view;
     private Button b_select;
     private Button b_add;
@@ -235,29 +232,14 @@ public class Game1 : Game
         b_add.Update();
 
         camera.Update(mouseState, mouseState.X, mouseState.Y);
-
-        int mouse_scroll_delta = mouseState.ScrollWheelValue - previousMouseState.ScrollWheelValue;
-
-        mouseX = mouseState.X;
-        mouseY = mouseState.Y;
-
-        if(mouse_scroll_delta < 0)
-            FOV += 2f;       
-        else if(mouse_scroll_delta > 0)
-            FOV -= 2f;
-
+        FOV = camera.Zoom(FOV);
         cameraPosition = camera.Orbiting(cameraPosition);
 
         if(mouseState.LeftButton == ButtonState.Pressed)
         {
             cube.ChangeColor(selection_color);
         }
-
-        if(keyboardState.IsKeyDown(Keys.O))
-        {
-            _projection = Matrix.CreateOrthographic(w_width, w_height, 0f, 1000f);
-        }
-
+        
         _view = Matrix.CreateLookAt(cameraPosition, cameraTarget, cameraUp);
         _effect.View = _view;
 
@@ -321,7 +303,6 @@ public class Game1 : Game
         _spriteBatch.DrawString(ui_font, $"MMB held: {MMBstatus}", new Vector2(10, 90), Color.White);
         _spriteBatch.DrawString(ui_font, $"phi value: {phi}", new Vector2(10, 110), Color.White);
         */
-        _spriteBatch.DrawString(ui_font, $"radius value: {radius}", new Vector2(10, 130), Color.White);
 
         _spriteBatch.End();
 
