@@ -29,7 +29,7 @@ public class Button : UIElement
 
         if(cursor.Intersects(rect))
         {
-            shade = Color.Aqua;
+            shade = Color.LightGray;
             if(ms.LeftButton == ButtonState.Pressed && last_mouse_state.LeftButton == ButtonState.Released)
             {
                 
@@ -46,5 +46,23 @@ public class Button : UIElement
     public override void Draw(SpriteBatch sb)
     {
         sb.Draw(texture, rect, shade);
+    }
+}
+
+public class HierarchyEntry : Button
+{
+    public SceneObject target_object;
+    public string object_name;
+    private SpriteFont font;
+    
+    public HierarchyEntry(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible, SpriteFont Font, SceneObject Target_Object) : base(Texture, Position, Width, Height, Is_Visible)
+    {
+        font = Font;
+        this.local_position = Position;
+    }
+    public override void Draw(SpriteBatch sb)
+    {
+        base.Draw(sb);
+        sb.DrawString(font, object_name, new Vector2(local_position.X, local_position.Y), Color.White); 
     }
 }

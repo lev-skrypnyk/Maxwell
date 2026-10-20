@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Maxwell;
 
-class SceneObject
+public class SceneObject
 {
     private Vector3 position;
     private Vector3 rotation;
