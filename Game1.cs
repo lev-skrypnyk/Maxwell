@@ -23,6 +23,7 @@ public class Game1 : Game
     private Color obj_color = new Color(160, 160, 160);
     private Color grid_color = new Color(60, 60, 60);//87
     private Color panel_color = new Color(35, 35, 35);
+    private Color window_color = new Color(45, 45, 45);
     private Color selection_color = new Color(232, 125, 13);
 
     private Color xAxisColor = new Color(100, 130, 50); //green
@@ -33,6 +34,8 @@ public class Game1 : Game
 
     int w_width;
     int w_height;
+
+    private float padding;
 
     private Vector3 movement;
     private float cameraSpeed;
@@ -56,22 +59,16 @@ public class Game1 : Game
     // mouse
     private MouseState mouseState;
     private MouseState previousMouseState;
-    private int mouseX;
-    private int mouseY;
-    private int PreviousMouseX;
-    private int PreviousMouseY;
-    private int deltaX;
-    private int deltaY;
 
-    private Button b_view;
-    private Button b_select;
-    private Button b_add;
+    private Button button_view;
+    private Button button_select;
+    private Button button_add;
 
     private float FOV;
 
-    private Panel p_properties_hierarchy;
+    private Panel panel_properties_hierarchy;
     private Texture2D pixel;
-    private Panel p_tool_bar;
+    private Panel panel_tool_bar;
 
     ButtonState previousMiddleButtonState = ButtonState.Released;
 
@@ -86,7 +83,11 @@ public class Game1 : Game
 
     SceneObject cube;
 
+    Window window_hierarchy;
+    Window window_transform;
+    
     Camera camera;
+
 
     public Game1()
     {
@@ -114,6 +115,7 @@ public class Game1 : Game
         cameraUp = new Vector3(0, 1, 0);
 
         FOV = 45.0f;
+        padding = 10.0f;
 
         movement = Vector3.Zero;
         cameraSpeed = 0.015f;
@@ -123,10 +125,6 @@ public class Game1 : Game
         radius = Vector3.Distance(cameraTarget, cameraPosition);
 
         previousMouseState = Mouse.GetState();
-        PreviousMouseX = 0;
-        PreviousMouseY = 0;
-        deltaX = 0;
-        deltaY = 0;
         mouseSensitivity = 0.35f;
 
         MMBstatus = false;
@@ -207,15 +205,20 @@ public class Game1 : Game
 
         ui_font = Content.Load<SpriteFont>("MainFont");
         //0.825
-        b_view = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
-        b_select = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png
-        b_add = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png
+        button_view = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
+        button_select = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png
+        button_add = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png
         
         //C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
-        //D:/code/monogame/Maxwell/Content/ui_add.pngd
+        //D:/code/monogame/Maxwell/Content/ui_add.png
 
-        p_properties_hierarchy = new(pixel, new(w_width - 325, 0), 325, w_height, true, panel_color);
-        p_tool_bar = new(pixel, new(0,0), w_width - 325, 35, true, panel_color);
+        // UI COMPONENT LAYOUT POSITION FORMULA -> WorldPosition = Parent.WorldPosition + LocalPosition
+
+        panel_properties_hierarchy = new(pixel, new(1275, 0), 325, w_height, true, panel_color);
+        panel_tool_bar = new(pixel, new(0,0), 1275, 35, true, panel_color);
+
+        window_hierarchy = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y), panel_properties_hierarchy.width, 250, true, window_color, padding, "Hierarchy", ui_font);
+        window_transform = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y + (window_hierarchy.height - padding)), panel_properties_hierarchy.width, 250, true, window_color, padding, "Transform", ui_font);
 
     }
 
@@ -227,18 +230,16 @@ public class Game1 : Game
         keyboardState = Keyboard.GetState();
         mouseState = Mouse.GetState();
 
-        b_view.Update();
-        b_select.Update();
-        b_add.Update();
+        button_view.Update();
+        button_select.Update();
+        button_add.Update();
 
         camera.Update(mouseState, mouseState.X, mouseState.Y);
         FOV = camera.Zoom(FOV);
         cameraPosition = camera.Orbiting(cameraPosition);
 
-        if(mouseState.LeftButton == ButtonState.Pressed)
-        {
-            cube.ChangeColor(selection_color);
-        }
+        //if(mouseState.LeftButton == ButtonState.Pressed)
+            //cube.ChangeColor(selection_color);
         
         _view = Matrix.CreateLookAt(cameraPosition, cameraTarget, cameraUp);
         _effect.View = _view;
@@ -282,12 +283,14 @@ public class Game1 : Game
 
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         
-        p_properties_hierarchy.Draw(_spriteBatch);
-        p_tool_bar.Draw(_spriteBatch);
+        panel_properties_hierarchy.Draw(_spriteBatch);
+        panel_tool_bar.Draw(_spriteBatch);
+        window_hierarchy.Draw(_spriteBatch);
+        window_transform.Draw(_spriteBatch);
         
-        b_view.Draw(_spriteBatch);
-        b_select.Draw(_spriteBatch);
-        b_add.Draw(_spriteBatch);
+        button_view.Draw(_spriteBatch);
+        button_select.Draw(_spriteBatch);
+        button_add.Draw(_spriteBatch);
         
 
         // X, Y, Z

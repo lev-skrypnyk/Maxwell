@@ -15,8 +15,12 @@ public class Button : UIElement
 {
     private Color shade = Color.White;
     private MouseState last_mouse_state;
+    protected Vector2 local_position;
 
-    public Button(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible) : base(Texture, Position, Width, Height, Is_Visible) {}
+    public Button(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible) : base(Texture, Position, Width, Height, Is_Visible)
+    {
+        local_position = Position;
+    }
 
     public override void Update()
     {

@@ -19,8 +19,9 @@ public class UIElement
     protected Rectangle rect;
     private Vector2 position;
     private bool is_visible;
-    private int width;
-    private int height;
+    public int width;
+    public int height;
+    //rect.Inflate(-padding,-padding);
 
     public UIElement(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible)
     {

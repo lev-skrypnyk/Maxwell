@@ -14,11 +14,13 @@ namespace Maxwell;
 public class Panel : UIElement
 {
     private Color panel_color;
+    public Vector2 local_position;
 
     public Panel(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible, Color Panel_Color) : 
     base(Texture, Position, Width, Height, Is_Visible)
     {
         panel_color = Panel_Color;
+        local_position = Position;
     }
 
     public override void Draw(SpriteBatch sb)
