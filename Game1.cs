@@ -31,6 +31,8 @@ public class Game1 : Game
     private Color zAxisColor = new Color(50, 135, 235); //blue
 
     RasterizerState wireframeState;
+    RasterizerState normalState;
+    private bool is_wireframe_enabled;
 
     int w_width;
     int w_height;
@@ -104,8 +106,19 @@ public class Game1 : Game
         _graphics.PreferredBackBufferHeight = 900;
         _graphics.ApplyChanges();
 
-        wireframeState = new RasterizerState();
-        wireframeState.FillMode = FillMode.WireFrame;
+        wireframeState = new RasterizerState
+        {
+            FillMode = FillMode.WireFrame,
+            CullMode = CullMode.None
+        };
+
+        normalState = new RasterizerState
+        {
+            FillMode = FillMode.Solid,
+            CullMode = CullMode.CullCounterClockwiseFace
+        };
+
+        is_wireframe_enabled = false;
 
         w_width = GraphicsDevice.Viewport.Width;
         w_height = GraphicsDevice.Viewport.Height;
@@ -242,6 +255,8 @@ public class Game1 : Game
 
         //if(mouseState.LeftButton == ButtonState.Pressed)
             //cube.ChangeColor(selection_color);
+
+        is_wireframe_enabled = keyboardState.IsKeyDown(Keys.Tab);
         
         _view = Matrix.CreateLookAt(cameraPosition, cameraTarget, cameraUp);
         _effect.View = _view;
@@ -256,10 +271,10 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(bg_color);
 
-
-        //relativeMousePos = Vector2.transform(MousePos, Matrix.Invert(transformMatrix));
-        GraphicsDevice.DepthStencilState = DepthStencilState.Default; //fixes problem where axis-lines get seen through the cube because of _spriteBatch.Begin and _spriteBatch.Begin.
-        //GraphicsDevice.RasterizerState = wireframeState;
+        GraphicsDevice.DepthStencilState = DepthStencilState.Default; //fixes problem where axis-lines get seen through the cube because of _spriteBatch.Begin and _spriteBatch.End.        
+        
+        GraphicsDevice.RasterizerState = is_wireframe_enabled ? wireframeState : normalState;
+        
 
         foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
         {
@@ -281,7 +296,6 @@ public class Game1 : Game
 
             
         }
-
 
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         
