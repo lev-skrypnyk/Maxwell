@@ -40,20 +40,36 @@ public class Window : UIElement
 
 public class HierarchyWindow : Window
 {
-    private List<HierarchyEntry> entries;
-    private Texture2D pixel;
-    private SpriteFont font;
+    protected List<HierarchyEntry> entries = new List<HierarchyEntry>();
 
-    public HierarchyWindow(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible, Color Panel_Color, float Padding, string Title, SpriteFont Font, Texture2D Pixel) : 
+    private SpriteFont font;
+    private float padding;
+    private float initial_offset = 50.0f;
+    private float offset = 0.0f;
+    protected int object_index = 0;
+    public string object_name;
+
+    public HierarchyWindow(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible, Color Panel_Color, float Padding, string Title, SpriteFont Font) : 
     base(Texture, Position, Width, Height, Is_Visible, Panel_Color, Padding, Title, Font)
     {
-        pixel = Pixel;
         font = Font;
+        padding = Padding;
+    }
+
+    public void Draw(SpriteBatch sb)
+    {
+        for(int i = 0; i < entries.Count; i++)
+        {
+            entries[i].Draw(sb);
+        }
     }
 
     public void AddEntry(SceneObject target_object)
     {
-        entries.Add(new HierarchyEntry(pixel, new Vector2(local_position.X, local_position.Y), width, 80, true, font, target_object));
+        object_name = $"object.{object_index}";
+        entries.Add(new HierarchyEntry(texture, new Vector2(local_position.X, local_position.Y + initial_offset + offset), width, 25, true, font, target_object, padding, object_name));
+        offset += 30.0f;
+        object_index++;
     }
 
 }

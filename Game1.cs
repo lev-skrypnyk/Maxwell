@@ -87,7 +87,7 @@ public class Game1 : Game
 
     Window window_hierarchy;
     Window window_transform;
-    //HierarchyWindow window_hierarchy;
+    HierarchyWindow entries_hierarchy;
     
     Camera camera;
 
@@ -232,9 +232,13 @@ public class Game1 : Game
         panel_tool_bar = new(pixel, new(0,0), 1275, 35, true, panel_color);
 
         window_hierarchy = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y), panel_properties_hierarchy.width, 250, true, window_color, padding, "Hierarchy", ui_font);
-        window_transform = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y + (window_hierarchy.height - padding)), panel_properties_hierarchy.width, 200, true, window_color, padding, "Transform", ui_font);
+        entries_hierarchy = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y), panel_properties_hierarchy.width, 250, true, window_color, padding, "Hierarchy", ui_font);
+        window_transform = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y + (entries_hierarchy.height - padding)), panel_properties_hierarchy.width, 200, true, window_color, padding, "Transform", ui_font);
 
-        //window_hierarchy.AddEntry(cube);
+        entries_hierarchy.AddEntry(cube);
+        entries_hierarchy.AddEntry(cube);
+        entries_hierarchy.AddEntry(cube);
+
     }
 
     protected override void Update(GameTime gameTime)
@@ -302,6 +306,7 @@ public class Game1 : Game
         panel_properties_hierarchy.Draw(_spriteBatch);
         panel_tool_bar.Draw(_spriteBatch);
         window_hierarchy.Draw(_spriteBatch);
+        entries_hierarchy.Draw(_spriteBatch);
         window_transform.Draw(_spriteBatch);
         
         button_view.Draw(_spriteBatch);
