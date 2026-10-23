@@ -16,5 +16,5 @@ public class TextBox : UIElement
     public TextBox(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible, Color TextBoxPasive, Color TextBoxActive) : 
     base(Texture, Position, Width, Height, Is_Visible) {}
 
-    
+    //public 
 }

@@ -83,7 +83,7 @@ public class Game1 : Game
 
     PerspectiveGrid grid;
 
-    SceneObject cube;
+    Cube cube;
 
     Window window_hierarchy;
     Window window_transform;
@@ -151,33 +151,9 @@ public class Game1 : Game
         pixel.SetData(new[] {Color.White});
 
         // scene objects initialization
-        cube = new SceneObject();
-        cube.geometry.AddRange(new[]
-        {
-            new VertexPositionColor(new Vector3(0,0,0), obj_color),
-            new VertexPositionColor(new Vector3(0,1,0), obj_color),
-            new VertexPositionColor(new Vector3(1,1,0), obj_color),
-            new VertexPositionColor(new Vector3(1,0,0), obj_color),
-            new VertexPositionColor(new Vector3(0,0,1), obj_color),
-            new VertexPositionColor(new Vector3(0,1,1), obj_color),
-            new VertexPositionColor(new Vector3(1,1,1), obj_color),
-            new VertexPositionColor(new Vector3(1,0,1), obj_color)
-        });
-        cube.indices.AddRange(new[]
-        {
-            0, 1, 2, // south 
-            0, 2, 3,
-            3, 2, 6, // east
-            3, 6, 7,
-            7, 6, 5, // north
-            7, 5, 4,
-            4, 5, 1, // west
-            4, 1, 0,
-            1, 5, 6, // top
-            1, 6, 2,
-            0, 7, 4, // bottom
-            0, 3, 7
-        });
+        cube = new Cube(obj_color);
+        //cube.geometry.AddRange()
+
 
         //_perspectiveGridVertices = new VertexPositionColor[]
 
@@ -219,9 +195,9 @@ public class Game1 : Game
 
         ui_font = Content.Load<SpriteFont>("MainFont");
         //0.825
-        button_view = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
-        button_select = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png
-        button_add = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png
+        button_view = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
+        button_select = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png
+        button_add = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png
         
         //C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
         //D:/code/monogame/Maxwell/Content/ui_add.png
@@ -238,6 +214,8 @@ public class Game1 : Game
         entries_hierarchy.AddEntry(cube);
         entries_hierarchy.AddEntry(cube);
         entries_hierarchy.AddEntry(cube);
+
+        HierarchyEntry.Update();
 
     }
 
@@ -290,6 +268,18 @@ public class Game1 : Game
             GraphicsDevice.DrawUserIndexedPrimitives
             (
                 PrimitiveType.TriangleList,
+                cube._vertices,
+                0,
+                cube._vertices.Length,
+                cube._indices,
+                0,
+                cube._indices.Length / 3
+            );
+
+            /*
+            GraphicsDevice.DrawUserIndexedPrimitives
+            (
+                PrimitiveType.TriangleList,
                 cube.geometry.ToArray(),
                 0,
                 cube.geometry.Count,
@@ -297,6 +287,7 @@ public class Game1 : Game
                 0,
                 cube.indices.Count / 3
             );
+            */
 
             
         }

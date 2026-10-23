@@ -64,7 +64,7 @@ public class HierarchyWindow : Window
         }
     }
 
-    public void AddEntry(SceneObject target_object)
+    public void AddEntry(Cube target_object) //SceneObject target_object
     {
         object_name = $"object.{object_index}";
         entries.Add(new HierarchyEntry(texture, new Vector2(local_position.X, local_position.Y + initial_offset + offset), width, 25, true, font, target_object, padding, object_name));

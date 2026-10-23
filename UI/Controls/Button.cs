@@ -51,12 +51,13 @@ public class Button : UIElement
 
 public class HierarchyEntry : Button
 {
-    public SceneObject target_object;
+    //public SceneObject target_object;
+    public Cube target_object;
     private SpriteFont font;
     private float padding;
     private string object_name;
     
-    public HierarchyEntry(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible, SpriteFont Font, SceneObject Target_Object, float Padding, string Object_name) : base(Texture, Position, Width, Height, Is_Visible)
+    public HierarchyEntry(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible, SpriteFont Font, Cube Target_Object, float Padding, string Object_name) : base(Texture, Position, Width, Height, Is_Visible)
     {
         font = Font;
         this.local_position = Position;
@@ -65,6 +66,12 @@ public class HierarchyEntry : Button
         this.rect.Inflate(-padding, 0.0f);
         object_name = Object_name;
     }
+
+    public void Update()
+    {
+        
+    }
+
     public override void Draw(SpriteBatch sb)
     {
         base.Draw(sb);

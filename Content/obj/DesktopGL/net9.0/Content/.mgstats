@@ -1,6 +1,6 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"D:/code/monogame/Maxwell/Content/ui_add_cube.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_add_cube.xnb","TextureProcessor","Texture2DContent",19200,1236529,0.1254965
-"D:/code/monogame/Maxwell/Content/ui_add_object.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_add_object.xnb","TextureProcessor","Texture2DContent",22979,1520565,0.0241491
-"D:/code/monogame/Maxwell/Content/ui_add.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_add.xnb","TextureProcessor","Texture2DContent",9243,631705,0.012009
-"D:/code/monogame/Maxwell/Content/ui_select.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_select.xnb","TextureProcessor","Texture2DContent",14149,876697,0.0125672
-"D:/code/monogame/Maxwell/Content/ui_view.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_view.xnb","TextureProcessor","Texture2DContent",10973,713369,0.0199591
+"C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add_cube.png","C:/Users/lev/Documents/GitHub/Maxwell/Content/bin/DesktopGL/Content/ui_add_cube.xnb","TextureProcessor","Texture2DContent",19200,1236529,0.1869569
+"C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add_object.png","C:/Users/lev/Documents/GitHub/Maxwell/Content/bin/DesktopGL/Content/ui_add_object.xnb","TextureProcessor","Texture2DContent",22979,1520565,0.0672192
+"C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png","C:/Users/lev/Documents/GitHub/Maxwell/Content/bin/DesktopGL/Content/ui_add.xnb","TextureProcessor","Texture2DContent",9243,631705,0.0262823
+"C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png","C:/Users/lev/Documents/GitHub/Maxwell/Content/bin/DesktopGL/Content/ui_select.xnb","TextureProcessor","Texture2DContent",14149,876697,0.0371663
+"C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png","C:/Users/lev/Documents/GitHub/Maxwell/Content/bin/DesktopGL/Content/ui_view.xnb","TextureProcessor","Texture2DContent",10973,713369,0.0282269

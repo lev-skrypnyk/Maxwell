@@ -58,8 +58,8 @@ public class SceneObject
         }
     }
 }   
-/*
-class Cube
+
+public class Cube
 {
 
     public VertexPositionColor[] _vertices;
@@ -98,4 +98,3 @@ class Cube
 
     
 }
-*/

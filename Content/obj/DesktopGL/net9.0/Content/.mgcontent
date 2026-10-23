@@ -4,11 +4,11 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>D:/code/monogame/Maxwell/Content/ui_add_cube.png</File>
-    <File>D:/code/monogame/Maxwell/Content/ui_add_object.png</File>
-    <File>D:/code/monogame/Maxwell/Content/ui_add.png</File>
-    <File>D:/code/monogame/Maxwell/Content/ui_select.png</File>
-    <File>D:/code/monogame/Maxwell/Content/ui_view.png</File>
+    <File>C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add_cube.png</File>
+    <File>C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add_object.png</File>
+    <File>C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png</File>
+    <File>C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png</File>
+    <File>C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />
