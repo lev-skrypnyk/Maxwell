@@ -14,7 +14,7 @@ namespace Maxwell;
 public class Window : UIElement
 {
     private Color window_color;
-    protected Vector2 local_position;
+    public Vector2 local_position;
     private string title;
     private SpriteFont font;
     private float padding;
@@ -40,7 +40,7 @@ public class Window : UIElement
 
 public class HierarchyWindow : Window
 {
-    protected List<HierarchyEntry> entries = new List<HierarchyEntry>();
+    public List<HierarchyEntry> entries = new List<HierarchyEntry>();
 
     private SpriteFont font;
     private float padding;
@@ -48,15 +48,17 @@ public class HierarchyWindow : Window
     private float offset = 0.0f;
     protected int object_index = 0;
     public string object_name;
+    private Texture2D object_icon;
 
-    public HierarchyWindow(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible, Color Panel_Color, float Padding, string Title, SpriteFont Font) : 
+    public HierarchyWindow(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible, Color Panel_Color, float Padding, string Title, SpriteFont Font, Texture2D Object_icon) : 
     base(Texture, Position, Width, Height, Is_Visible, Panel_Color, Padding, Title, Font)
     {
         font = Font;
         padding = Padding;
+        object_icon = Object_icon;
     }
 
-    public void Draw(SpriteBatch sb)
+    public override void Draw(SpriteBatch sb)
     {
         for(int i = 0; i < entries.Count; i++)
         {
@@ -64,11 +66,17 @@ public class HierarchyWindow : Window
         }
     }
 
-    public void AddEntry(SceneObject target_object)
+    public override void Update()
+    {
+        for(int i = 0; i < entries.Count; i++)
+            entries[i].Update();  
+    }
+
+    public void AddEntry(SceneObject target_object, Texture2D object_icon)
     {
         object_name = $"object.{object_index}";
-        entries.Add(new HierarchyEntry(texture, new Vector2(local_position.X, local_position.Y + initial_offset + offset), width, 25, true, font, target_object, padding, object_name));
-        offset += 30.0f;
+        entries.Add(new HierarchyEntry(texture, new Vector2(local_position.X, local_position.Y + initial_offset + offset), width, 30, true, font, target_object, padding, object_name));
+        offset += 35.0f;
         object_index++;
     }
 

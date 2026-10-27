@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
@@ -61,6 +62,8 @@ public class Game1 : Game
     // mouse
     private MouseState mouseState;
     private MouseState previousMouseState;
+
+    private Texture2D object_icon;
 
     private Button button_view;
     private Button button_select;
@@ -222,7 +225,7 @@ public class Game1 : Game
         button_view = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
         button_select = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png
         button_add = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png
-        
+        object_icon = Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/3d_object_icon.png");
         //C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
         //D:/code/monogame/Maxwell/Content/ui_add.png
 
@@ -232,12 +235,12 @@ public class Game1 : Game
         panel_tool_bar = new(pixel, new(0,0), 1275, 35, true, panel_color);
 
         window_hierarchy = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y), panel_properties_hierarchy.width, 250, true, window_color, padding, "Hierarchy", ui_font);
-        entries_hierarchy = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y), panel_properties_hierarchy.width, 250, true, window_color, padding, "Hierarchy", ui_font);
+        entries_hierarchy = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y), panel_properties_hierarchy.width, 250, true, window_color, padding, "Hierarchy", ui_font,object_icon);
         window_transform = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y + (entries_hierarchy.height - padding)), panel_properties_hierarchy.width, 200, true, window_color, padding, "Transform", ui_font);
 
-        entries_hierarchy.AddEntry(cube);
-        entries_hierarchy.AddEntry(cube);
-        entries_hierarchy.AddEntry(cube);
+        entries_hierarchy.AddEntry(cube,object_icon);
+        entries_hierarchy.AddEntry(cube,object_icon);
+        entries_hierarchy.AddEntry(cube,object_icon);
 
     }
 
@@ -253,12 +256,14 @@ public class Game1 : Game
         button_select.Update();
         button_add.Update();
 
+        entries_hierarchy.Update();
+
         camera.Update(mouseState, mouseState.X, mouseState.Y);
         FOV = camera.Zoom(FOV);
         cameraPosition = camera.Orbiting(cameraPosition);
 
         //if(mouseState.LeftButton == ButtonState.Pressed)
-            //cube.ChangeColor(selection_color);
+            
 
         is_wireframe_enabled = keyboardState.IsKeyDown(Keys.Tab);
         

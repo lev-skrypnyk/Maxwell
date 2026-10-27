@@ -13,7 +13,7 @@ namespace Maxwell;
 
 public class Button : UIElement
 {
-    private Color shade = Color.White;
+    protected Color shade = Color.White;
     private MouseState last_mouse_state;
     protected Vector2 local_position;
 
@@ -29,7 +29,7 @@ public class Button : UIElement
 
         if(cursor.Intersects(rect))
         {
-            shade = Color.Blue;
+            shade = Color.Gray;
             if(ms.LeftButton == ButtonState.Pressed && last_mouse_state.LeftButton == ButtonState.Released)
             {
                 
@@ -51,10 +51,11 @@ public class Button : UIElement
 
 public class HierarchyEntry : Button
 {
+    private Color entry_color = new Color(35, 35, 35);
     public SceneObject target_object;
+    private string object_name;
     private SpriteFont font;
     private float padding;
-    private string object_name;
     
     public HierarchyEntry(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible, SpriteFont Font, SceneObject Target_Object, float Padding, string Object_name) : base(Texture, Position, Width, Height, Is_Visible)
     {
@@ -67,7 +68,8 @@ public class HierarchyEntry : Button
     }
     public override void Draw(SpriteBatch sb)
     {
-        base.Draw(sb);
-        sb.DrawString(font, object_name, new Vector2(local_position.X + padding, local_position.Y), Color.Red); 
+        //sb.Draw(object_icon, rect, Color.White);
+        sb.Draw(texture, rect, shade);
+        sb.DrawString(font, object_name, new Vector2(local_position.X + padding, this.local_position.Y), Color.Black); 
     }
 }

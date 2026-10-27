@@ -15,6 +15,7 @@ namespace Maxwell;
 
 public class UIElement
 {
+
     protected Texture2D texture;
     protected Rectangle rect;
     private Vector2 position;

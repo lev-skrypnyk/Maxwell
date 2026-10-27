@@ -84,3 +84,4 @@ C:\Users\lev\Documents\GitHub\Maxwell\obj\Debug\net9.0\refint\Maxwell.dll
 C:\Users\lev\Documents\GitHub\Maxwell\obj\Debug\net9.0\Maxwell.pdb
 C:\Users\lev\Documents\GitHub\Maxwell\obj\Debug\net9.0\Maxwell.genruntimeconfig.cache
 C:\Users\lev\Documents\GitHub\Maxwell\obj\Debug\net9.0\ref\Maxwell.dll
+D:\code\monogame\Maxwell\bin\Debug\net9.0\Content\3d_object_icon.xnb
