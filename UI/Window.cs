@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Net.Http.Headers;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Xna.Framework;
@@ -72,12 +73,21 @@ public class HierarchyWindow : Window
             entries[i].Update();  
     }
 
-    public void AddEntry(SceneObject target_object, Texture2D object_icon)
+    public bool IsObjectSelected()
+    {
+        foreach(HierarchyEntry entry in entries)
+        {
+            if(entry.is_selected)
+                return true;
+        }
+        return false;
+    }
+
+    public void AddEntry(SceneObject target_object)
     {
         object_name = $"object.{object_index}";
-        entries.Add(new HierarchyEntry(texture, new Vector2(local_position.X, local_position.Y + initial_offset + offset), width, 30, true, font, target_object, padding, object_name));
+        entries.Add(new HierarchyEntry(texture, new Vector2(local_position.X, local_position.Y + initial_offset + offset), width, 30, true, font, target_object, padding, object_name, object_icon));
         offset += 35.0f;
         object_index++;
     }
-
 }

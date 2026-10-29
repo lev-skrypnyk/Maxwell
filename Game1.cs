@@ -22,13 +22,14 @@ public class Game1 : Game
     
     private Color bg_color = new Color(25, 25, 25); //34
     private Color obj_color = new Color(160, 160, 160);
+    private Color defalut_obj_color = new Color(160, 160, 160);
     private Color grid_color = new Color(60, 60, 60);//87
     private Color panel_color = new Color(35, 35, 35);
     private Color window_color = new Color(45, 45, 45);
-    private Color selection_color = new Color(232, 125, 13);
+    private Color selection_color = new Color(52, 122, 194);
 
-    private Color xAxisColor = new Color(100, 130, 50); //green
-    private Color yAxisColor = new Color(150, 60, 75);  //red
+    private Color xAxisColor = new Color(150, 60, 75); //green
+    private Color yAxisColor = new Color(100, 130, 50);  //red
     private Color zAxisColor = new Color(50, 135, 235); //blue
 
     RasterizerState wireframeState;
@@ -235,12 +236,11 @@ public class Game1 : Game
         panel_tool_bar = new(pixel, new(0,0), 1275, 35, true, panel_color);
 
         window_hierarchy = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y), panel_properties_hierarchy.width, 250, true, window_color, padding, "Hierarchy", ui_font);
-        entries_hierarchy = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y), panel_properties_hierarchy.width, 250, true, window_color, padding, "Hierarchy", ui_font,object_icon);
+        entries_hierarchy = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y), panel_properties_hierarchy.width, 250, true, window_color, padding, "Hierarchy", ui_font, object_icon);
         window_transform = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y + (entries_hierarchy.height - padding)), panel_properties_hierarchy.width, 200, true, window_color, padding, "Transform", ui_font);
 
-        entries_hierarchy.AddEntry(cube,object_icon);
-        entries_hierarchy.AddEntry(cube,object_icon);
-        entries_hierarchy.AddEntry(cube,object_icon);
+        entries_hierarchy.AddEntry(cube);
+
 
     }
 
@@ -248,6 +248,11 @@ public class Game1 : Game
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
+
+        button_add.OnClick = () => {entries_hierarchy.AddEntry(cube);};
+
+        obj_color = (entries_hierarchy.IsObjectSelected()) ? selection_color : defalut_obj_color;
+        cube.ChangeColor(obj_color);
 
         keyboardState = Keyboard.GetState();
         mouseState = Mouse.GetState();
