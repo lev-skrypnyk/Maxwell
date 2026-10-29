@@ -71,7 +71,7 @@ public class HierarchyEntry : Button
     
     private Texture2D object_icon; 
     
-    public HierarchyEntry(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible, SpriteFont Font, SceneObject Target_Object, float Padding, string Object_name, Texture2D Object_icon) : base(Texture, Position, Width, Height, Is_Visible)
+    public HierarchyEntry(Texture2D Texture, Vector2 Position, int Width, int Height, bool Is_Visible, SpriteFont Font, Cube Target_Object, float Padding, string Object_name, Texture2D Object_icon) : base(Texture, Position, Width, Height, Is_Visible)
     {
         font = Font;
         this.local_position = Position;

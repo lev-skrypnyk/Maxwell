@@ -48,7 +48,7 @@ public class SceneObject
         scale.Z = object_scl.Z;
     }
 
-    public void ChangeColor(Color new_color)
+    public virtual void ChangeColor(Color new_color)
     {
         for(int i = 0; i < geometry.Count; i++)
         {
@@ -58,8 +58,8 @@ public class SceneObject
         }
     }
 }   
-/*
-class Cube
+
+public class Cube : SceneObject
 {
 
     public VertexPositionColor[] _vertices;
@@ -95,7 +95,13 @@ class Cube
             0, 3, 7
         };
     }
-
-    
+    public override void ChangeColor(Color new_color)
+    {
+        for(int i = 0; i < _vertices.Length; i++)
+        {
+            VertexPositionColor vertex = _vertices[i];
+            vertex.Color = new_color;
+            _vertices[i] = vertex;
+        }
+    }
 }
-*/

@@ -1,7 +1,7 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"D:/code/monogame/Maxwell/Content/3d_object_icon.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/3d_object_icon.xnb","TextureProcessor","Texture2DContent",7804,1048661,0.1017157
-"D:/code/monogame/Maxwell/Content/ui_add_cube.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_add_cube.xnb","TextureProcessor","Texture2DContent",19200,1236529,0.0189858
-"D:/code/monogame/Maxwell/Content/ui_add_object.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_add_object.xnb","TextureProcessor","Texture2DContent",22979,1520565,0.0285916
-"D:/code/monogame/Maxwell/Content/ui_add.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_add.xnb","TextureProcessor","Texture2DContent",9243,631705,0.0092054
-"D:/code/monogame/Maxwell/Content/ui_select.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_select.xnb","TextureProcessor","Texture2DContent",14149,876697,0.0118518
-"D:/code/monogame/Maxwell/Content/ui_view.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_view.xnb","TextureProcessor","Texture2DContent",10973,713369,0.02657
+"D:/code/monogame/Maxwell/Content/3d_object_icon.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/3d_object_icon.xnb","TextureProcessor","Texture2DContent",7804,1048661,0.1027761
+"D:/code/monogame/Maxwell/Content/ui_add_cube.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_add_cube.xnb","TextureProcessor","Texture2DContent",19200,1236529,0.0172657
+"D:/code/monogame/Maxwell/Content/ui_add_object.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_add_object.xnb","TextureProcessor","Texture2DContent",22979,1520565,0.0230183
+"D:/code/monogame/Maxwell/Content/ui_add.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_add.xnb","TextureProcessor","Texture2DContent",9243,631705,0.0076507
+"D:/code/monogame/Maxwell/Content/ui_select.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_select.xnb","TextureProcessor","Texture2DContent",14149,876697,0.0101393
+"D:/code/monogame/Maxwell/Content/ui_view.png","D:/code/monogame/Maxwell/Content/bin/DesktopGL/Content/ui_view.xnb","TextureProcessor","Texture2DContent",10973,713369,0.0123412
