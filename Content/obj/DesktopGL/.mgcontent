@@ -10,8 +10,14 @@
     <File>d:/code/monogame/Maxwell/Content/ui_add.png</File>
     <File>d:/code/monogame/Maxwell/Content/ui_select.png</File>
     <File>d:/code/monogame/Maxwell/Content/ui_view.png</File>
+    <File>d:/code/monogame/Maxwell/Content/x_icon.png</File>
+    <File>d:/code/monogame/Maxwell/Content/y_icon.png</File>
+    <File>d:/code/monogame/Maxwell/Content/z_icon.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

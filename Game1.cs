@@ -28,9 +28,9 @@ public class Game1 : Game
     private Color window_color = new Color(45, 45, 45);
     private Color selection_color = new Color(52, 122, 194);
 
-    private Color xAxisColor = new Color(150, 60, 75); //green
-    private Color yAxisColor = new Color(100, 130, 50);  //red
+    private Color xAxisColor = new Color(150, 60, 75); //red
     private Color zAxisColor = new Color(50, 135, 235); //blue
+    private Color yAxisColor = new Color(100, 130, 50);  //green
 
     RasterizerState wireframeState;
     RasterizerState normalState;
@@ -42,7 +42,6 @@ public class Game1 : Game
     private float padding;
 
     private Vector3 movement;
-    private float cameraSpeed;
 
     private float aspect_ratio;
 
@@ -70,20 +69,19 @@ public class Game1 : Game
     private Button button_select;
     private Button button_add;
 
+    private Texture2D axis_icon_x;
+    private Texture2D axis_icon_y;
+    private Texture2D axis_icon_z;
+
+    private TextBox textbox_pos_x;
+
     private float FOV;
 
     private Panel panel_properties_hierarchy;
     private Texture2D pixel;
     private Panel panel_tool_bar;
 
-    ButtonState previousMiddleButtonState = ButtonState.Released;
-
-    private float mouseSensitivity;
-    private float zoomMultiplier;
-
     private float radius; //distance from target object position (e.g. 0,0,0) to camera position (e.g. 3, 2.5, 3)
-
-    private bool MMBstatus;
 
     PerspectiveGrid grid;
 
@@ -136,16 +134,12 @@ public class Game1 : Game
         padding = 10.0f;
 
         movement = Vector3.Zero;
-        cameraSpeed = 0.015f;
 
-        zoomMultiplier = 1.0f;
 
         radius = Vector3.Distance(cameraTarget, cameraPosition);
 
         previousMouseState = Mouse.GetState();
-        mouseSensitivity = 0.35f;
 
-        MMBstatus = false;
 
         grid = new PerspectiveGrid(grid_color);
 
@@ -203,12 +197,15 @@ public class Game1 : Game
         button_view = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
         button_select = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png
         button_add = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png
+
         object_icon = Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/3d_object_icon.png");
+
+        axis_icon_x = Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/x_icon.png");
+        axis_icon_y = Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/y_icon.png");
+        axis_icon_z = Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/z_icon.png");
 
         //C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
         //D:/code/monogame/Maxwell/Content/ui_add.png
-
-        // UI COMPONENT LAYOUT POSITION FORMULA -> WorldPosition = Parent.WorldPosition + LocalPosition
 
         panel_properties_hierarchy = new(pixel, new(1275, 0), 325, w_height, true, panel_color);
         panel_tool_bar = new(pixel, new(0,0), 1275, 35, true, panel_color);
@@ -217,6 +214,10 @@ public class Game1 : Game
         entries_hierarchy = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y), panel_properties_hierarchy.width, 250, true, window_color, padding, "Hierarchy", ui_font, object_icon);
         window_transform = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y + (entries_hierarchy.height - padding)), panel_properties_hierarchy.width, 200, true, window_color, padding, "Transform", ui_font);
 
+
+        textbox_pos_x = new(pixel, new(window_transform.local_position.X + padding*2, 300), 60, 25, true, Color.Red, ui_font, axis_icon_x);
+        
+        
         entries_hierarchy.AddEntry(cube);
 
 
@@ -240,6 +241,8 @@ public class Game1 : Game
         button_view.Update();
         button_select.Update();
         button_add.Update();
+
+        textbox_pos_x.Update();
 
         entries_hierarchy.Update();
 
@@ -311,6 +314,8 @@ public class Game1 : Game
         window_hierarchy.Draw(_spriteBatch);
         entries_hierarchy.Draw(_spriteBatch);
         window_transform.Draw(_spriteBatch);
+
+        textbox_pos_x.Draw(_spriteBatch);
         
         button_view.Draw(_spriteBatch);
         button_select.Draw(_spriteBatch);

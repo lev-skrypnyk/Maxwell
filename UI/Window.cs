@@ -85,7 +85,7 @@ public class HierarchyWindow : Window
 
     public void AddEntry(Cube target_object)
     {
-        object_name = $"object.{object_index}";
+        object_name = $"object.{object_index + 1}";
         entries.Add(new HierarchyEntry(texture, new Vector2(local_position.X, local_position.Y + initial_offset + offset), width, 30, true, font, target_object, padding, object_name, object_icon));
         offset += 35.0f;
         object_index++;

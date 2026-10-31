@@ -5,3 +5,6 @@ Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Siz
 "d:/code/monogame/Maxwell/Content/ui_add.png","d:/code/monogame/Maxwell/Content/bin/DesktopGL/ui_add.xnb","TextureProcessor","Texture2DContent",9243,631705,0.103034
 "d:/code/monogame/Maxwell/Content/ui_select.png","d:/code/monogame/Maxwell/Content/bin/DesktopGL/ui_select.xnb","TextureProcessor","Texture2DContent",14149,876697,0.0151743
 "d:/code/monogame/Maxwell/Content/ui_view.png","d:/code/monogame/Maxwell/Content/bin/DesktopGL/ui_view.xnb","TextureProcessor","Texture2DContent",10973,713369,0.0200869
+"d:/code/monogame/Maxwell/Content/x_icon.png","d:/code/monogame/Maxwell/Content/bin/DesktopGL/x_icon.xnb","TextureProcessor","Texture2DContent",629,5885,0.088175
+"d:/code/monogame/Maxwell/Content/y_icon.png","d:/code/monogame/Maxwell/Content/bin/DesktopGL/y_icon.xnb","TextureProcessor","Texture2DContent",488,5885,0.0067158
+"d:/code/monogame/Maxwell/Content/z_icon.png","d:/code/monogame/Maxwell/Content/bin/DesktopGL/z_icon.xnb","TextureProcessor","Texture2DContent",488,5885,0.0056523
