@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Xna.Framework;
@@ -32,6 +33,8 @@ public class Game1 : Game
     private Color zAxisColor = new Color(50, 135, 235); //blue
     private Color yAxisColor = new Color(100, 130, 50);  //green
 
+    private float horiz_gap = 95.0f;
+
     RasterizerState wireframeState;
     RasterizerState normalState;
     private bool is_wireframe_enabled;
@@ -55,6 +58,8 @@ public class Game1 : Game
     private Vector3 cameraTarget;
     private Vector3 cameraUp;
 
+    private Vector3 object_pos;
+
     private VertexPositionColor[] _axisVertices;
 
     private KeyboardState keyboardState;
@@ -73,7 +78,12 @@ public class Game1 : Game
     private Texture2D axis_icon_y;
     private Texture2D axis_icon_z;
 
-    private TextBox textbox_pos_x;
+    private TextBox textbox_x;
+    private TextBox textbox_y;
+    private TextBox textbox_z;
+
+    private TransformationType transform_position;
+    private TransformationType transform_scale;
 
     private float FOV;
 
@@ -81,9 +91,12 @@ public class Game1 : Game
     private Texture2D pixel;
     private Panel panel_tool_bar;
 
+    public static bool deselection_allowed;
+
     private float radius; //distance from target object position (e.g. 0,0,0) to camera position (e.g. 3, 2.5, 3)
 
     PerspectiveGrid grid;
+    
 
     Cube cube;
 
@@ -107,6 +120,8 @@ public class Game1 : Game
         _graphics.PreferredBackBufferWidth = 1600;
         _graphics.PreferredBackBufferHeight = 900;
         _graphics.ApplyChanges();
+
+        deselection_allowed = true;
 
         wireframeState = new RasterizerState
         {
@@ -144,6 +159,7 @@ public class Game1 : Game
         grid = new PerspectiveGrid(grid_color);
 
         camera = new Camera();
+
 
         pixel = new Texture2D(GraphicsDevice, 1, 1);
         pixel.SetData(new[] {Color.White});
@@ -215,11 +231,14 @@ public class Game1 : Game
         window_transform = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y + (entries_hierarchy.height - padding)), panel_properties_hierarchy.width, 200, true, window_color, padding, "Transform", ui_font);
 
 
-        textbox_pos_x = new(pixel, new(window_transform.local_position.X + padding*2, 300), 60, 25, true, Color.Red, ui_font, axis_icon_x);
+        textbox_x = new(pixel, new(window_transform.local_position.X + (padding*2), 315), 70, 25, true, Color.White, ui_font, axis_icon_x, 0.0f);
+        textbox_y = new(pixel, new(window_transform.local_position.X + (padding*2), 315), 70, 25, true, Color.White, ui_font, axis_icon_y, horiz_gap);
+        textbox_z = new(pixel, new(window_transform.local_position.X + (padding*2), 315), 70, 25, true, Color.White, ui_font, axis_icon_z, horiz_gap*2);
         
+        transform_position = new TransformationType(textbox_x, textbox_y, textbox_z, "Position", ui_font, 0.0f);
+        //transform_scale = new TransformationType(textbox_x, textbox_y, textbox_z, "Scale", ui_font, 50.0f);
         
         entries_hierarchy.AddEntry(cube);
-
 
         entries_hierarchy.Update();
 
@@ -238,11 +257,16 @@ public class Game1 : Game
         keyboardState = Keyboard.GetState();
         mouseState = Mouse.GetState();
 
+        cube.objectPosition = new Vector3(transform_position.x_axis_textbox.value, transform_position.y_axis_textbox.value, transform_position.z_axis_textbox.value);
+
         button_view.Update();
         button_select.Update();
         button_add.Update();
 
-        textbox_pos_x.Update();
+        //textbox_x.Update();
+        transform_position.Update();
+        //transform_scale.Update();
+
 
         entries_hierarchy.Update();
 
@@ -254,12 +278,17 @@ public class Game1 : Game
             
 
         is_wireframe_enabled = keyboardState.IsKeyDown(Keys.Tab);
+
+        //_effect.World = Matrix.CreateTranslation(cube.objectPosition);
         
         _view = Matrix.CreateLookAt(cameraPosition, cameraTarget, cameraUp);
         _effect.View = _view;
 
         _projection = Matrix.CreatePerspectiveFieldOfView((float)(FOV * (Math.PI / 180)), aspect_ratio, 0.1f, 100.0f);
         _effect.Projection = _projection;
+
+        
+
 
         base.Update(gameTime);
     }
@@ -269,16 +298,21 @@ public class Game1 : Game
         GraphicsDevice.Clear(bg_color);
 
         GraphicsDevice.DepthStencilState = DepthStencilState.Default; //fixes problem where axis-lines get seen through the cube because of _spriteBatch.Begin and _spriteBatch.End.        
-        
         GraphicsDevice.RasterizerState = is_wireframe_enabled ? wireframeState : normalState;
-        
+
+        _effect.World = Matrix.Identity;
+        foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
+        {
+            pass.Apply();
+            GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, _axisVertices, 0, 2); //change 2->3 if I want y-axis to be displayed.
+            GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, grid._gridVertices, 0, 64);
+        }
+
+        _effect.World = Matrix.CreateTranslation(cube.objectPosition);
 
         foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
         {
             pass.Apply();
-
-            GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, _axisVertices, 0, 2); //change 2->3 if I want y-axis to be displayed.
-            GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, grid._gridVertices, 0, 64);
 
             GraphicsDevice.DrawUserIndexedPrimitives
             (
@@ -315,7 +349,8 @@ public class Game1 : Game
         entries_hierarchy.Draw(_spriteBatch);
         window_transform.Draw(_spriteBatch);
 
-        textbox_pos_x.Draw(_spriteBatch);
+        transform_position.Draw(_spriteBatch);
+        //transform_scale.Draw(_spriteBatch);
         
         button_view.Draw(_spriteBatch);
         button_select.Draw(_spriteBatch);
@@ -324,11 +359,13 @@ public class Game1 : Game
 
         // X, Y, Z
 
-        /*
-        _spriteBatch.DrawString(ui_font, $"X", new Vector2(10, 12), xAxisColor);
-        _spriteBatch.DrawString(ui_font, $"Y", new Vector2(25, 12), yAxisColor);
-        _spriteBatch.DrawString(ui_font, $"Z", new Vector2(40, 12), zAxisColor);
         
+        //_spriteBatch.DrawString(ui_font, $"X", new Vector2(10, 12), xAxisColor);
+        _spriteBatch.DrawString(ui_font, $"X", new Vector2(panel_properties_hierarchy.local_position.X - 50.0f, 40.0f), xAxisColor);
+        _spriteBatch.DrawString(ui_font, $"Y", new Vector2(panel_properties_hierarchy.local_position.X - 35.0f, 40.0f), yAxisColor);
+        _spriteBatch.DrawString(ui_font, $"Z", new Vector2(panel_properties_hierarchy.local_position.X - 20.0f, 40.0f), zAxisColor);
+        
+        /*
         _spriteBatch.DrawString(ui_font, $"Camera Position ({Math.Round(cameraPosition.X, 2)}, {Math.Round(cameraPosition.Y, 2)}, {Math.Round(cameraPosition.Z, 2)})", new Vector2(10, 30), Color.White);
         _spriteBatch.DrawString(ui_font, $"Cursor Position ({mouseX}, {mouseY})", new Vector2(10, 50), Color.White);
         _spriteBatch.DrawString(ui_font, $"Delta (X:{deltaX}, Y:{deltaY})", new Vector2(10, 70), Color.White);

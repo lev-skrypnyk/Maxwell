@@ -64,6 +64,7 @@ public class Cube : SceneObject
 
     public VertexPositionColor[] _vertices;
     public short[] _indices;
+    public Vector3 objectPosition = new Vector3(0,0,0);
 
     public Cube(Color obj_color)
     {
@@ -95,6 +96,12 @@ public class Cube : SceneObject
             0, 3, 7
         };
     }
+
+    public void ChangePosition(Vector3 new_position)
+    {
+        objectPosition = new_position;
+    }
+
     public override void ChangeColor(Color new_color)
     {
         for(int i = 0; i < _vertices.Length; i++)

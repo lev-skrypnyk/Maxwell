@@ -17,7 +17,7 @@ public class UIElement
 {
 
     protected Texture2D texture;
-    protected Rectangle rect;
+    public Rectangle rect;
     private Vector2 position;
     private bool is_visible;
     public int width;
