@@ -24,6 +24,7 @@ public class Camera
     private int deltaY;
     private float mouseSensitivity = 0.35f;
     private float radius = 6.0f;
+    int mouse_scroll_delta;
     //radius = Vector3.Distance(cameraTarget, cameraPosition);
 
     private float theta = 0;
@@ -75,17 +76,28 @@ public class Camera
         return new Vector3(cameraPosition.X, cameraPosition.Y, cameraPosition.Z);
     }
 
-    public float Zoom(float FOV)
+    public Vector3 Zoom(Vector3 cameraPosition)
     {
-        int mouse_scroll_delta = mouseState.ScrollWheelValue - previousMouseState.ScrollWheelValue;
+        mouse_scroll_delta = mouseState.ScrollWheelValue - previousMouseState.ScrollWheelValue;
 
         if(mouse_scroll_delta < 0)
-            FOV += 5f;       
+        {
+            //FOV += 5f; 
+            cameraPosition.X += 0.5f;
+            cameraPosition.Y += 0.5f;
+            cameraPosition.Z += 0.5f;
+            return new Vector3(cameraPosition.X, cameraPosition.Y, cameraPosition.Z);
+        }
         else if(mouse_scroll_delta > 0)
-            FOV -= 5f;
+        {
+            cameraPosition.X -= 0.5f;
+            cameraPosition.Y -= 0.5f;
+            cameraPosition.Z -= 0.5f;
+            return new Vector3(cameraPosition.X, cameraPosition.Y, cameraPosition.Z);
+        }
 
         previousMouseState = mouseState;
-
-        return FOV;
+        
+        return cameraPosition;
     }
 }

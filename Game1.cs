@@ -82,6 +82,8 @@ public class Game1 : Game
     private TextBox textbox_y;
     private TextBox textbox_z;
 
+    private TextBox textbox_FOV;
+
     private TransformationType transform_position;
     private TransformationType transform_scale;
 
@@ -210,15 +212,16 @@ public class Game1 : Game
         ui_font = Content.Load<SpriteFont>("MainFont");
         //0.825
 
-        button_view = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
-        button_select = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png
-        button_add = new(Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319  C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png
+        //"D:/code/monogame/Maxwell/Content/ui_view.png"
+        button_view = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png"), new(70, 5), 46, 26, true); //559x319 D:/code/monogame/Maxwell/Content/ui_view.png
+        button_select = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_select.png"), new(120, 5), 57, 26, true); //687x319 D:/code/monogame/Maxwell/Content/ui_select.png
+        button_add = new(Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_add.png"), new(182, 5), 41, 26, true); //495x319 D:/code/monogame/Maxwell/Content/ui_add.png
 
-        object_icon = Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/3d_object_icon.png");
+        object_icon = Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/3d_object_icon.png"); //D:/code/monogame/Maxwell/Content/3d_object_icon.png
 
-        axis_icon_x = Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/x_icon.png");
-        axis_icon_y = Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/y_icon.png");
-        axis_icon_z = Content.Load<Texture2D>("D:/code/monogame/Maxwell/Content/z_icon.png");
+        axis_icon_x = Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/x_icon.png"); //D:/code/monogame/Maxwell/Content/x_icon.png
+        axis_icon_y = Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/y_icon.png");
+        axis_icon_z = Content.Load<Texture2D>("C:/Users/lev/Documents/GitHub/Maxwell/Content/z_icon.png");
 
         //C:/Users/lev/Documents/GitHub/Maxwell/Content/ui_view.png
         //D:/code/monogame/Maxwell/Content/ui_add.png
@@ -235,8 +238,11 @@ public class Game1 : Game
         textbox_y = new(pixel, new(window_transform.local_position.X + (padding*2), 315), 70, 25, true, Color.White, ui_font, axis_icon_y, horiz_gap);
         textbox_z = new(pixel, new(window_transform.local_position.X + (padding*2), 315), 70, 25, true, Color.White, ui_font, axis_icon_z, horiz_gap*2);
         
+        textbox_x = new(pixel, new(window_transform.local_position.X + (padding*2), 315), 70, 25, true, Color.White, ui_font, axis_icon_x, 0.0f);
+
         transform_position = new TransformationType(textbox_x, textbox_y, textbox_z, "Position", ui_font, 0.0f);
         //transform_scale = new TransformationType(textbox_x, textbox_y, textbox_z, "Scale", ui_font, 50.0f);
+        //create new textboxes variables to fix scale and rotation textboxes problem
         
         entries_hierarchy.AddEntry(cube);
 
@@ -271,7 +277,8 @@ public class Game1 : Game
         entries_hierarchy.Update();
 
         camera.Update(mouseState, mouseState.X, mouseState.Y);
-        FOV = camera.Zoom(FOV);
+        //FOV = camera.Zoom(FOV);
+        cameraPosition = camera.Zoom(cameraPosition);
         cameraPosition = camera.Orbiting(cameraPosition);
 
         //if(mouseState.LeftButton == ButtonState.Pressed)
@@ -365,8 +372,8 @@ public class Game1 : Game
         _spriteBatch.DrawString(ui_font, $"Y", new Vector2(panel_properties_hierarchy.local_position.X - 35.0f, 40.0f), yAxisColor);
         _spriteBatch.DrawString(ui_font, $"Z", new Vector2(panel_properties_hierarchy.local_position.X - 20.0f, 40.0f), zAxisColor);
         
-        /*
         _spriteBatch.DrawString(ui_font, $"Camera Position ({Math.Round(cameraPosition.X, 2)}, {Math.Round(cameraPosition.Y, 2)}, {Math.Round(cameraPosition.Z, 2)})", new Vector2(10, 30), Color.White);
+        /*
         _spriteBatch.DrawString(ui_font, $"Cursor Position ({mouseX}, {mouseY})", new Vector2(10, 50), Color.White);
         _spriteBatch.DrawString(ui_font, $"Delta (X:{deltaX}, Y:{deltaY})", new Vector2(10, 70), Color.White);
         _spriteBatch.DrawString(ui_font, $"MMB held: {MMBstatus}", new Vector2(10, 90), Color.White);
