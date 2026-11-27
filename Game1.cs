@@ -78,9 +78,13 @@ public class Game1 : Game
     private Texture2D axis_icon_y;
     private Texture2D axis_icon_z;
 
-    private TextBox textbox_x;
-    private TextBox textbox_y;
-    private TextBox textbox_z;
+    private TextBox textbox_position_x;
+    private TextBox textbox_position_y;
+    private TextBox textbox_position_z;
+
+    private TextBox textbox_scale_x;
+    private TextBox textbox_scale_y;
+    private TextBox textbox_scale_z;
 
     private TextBox textbox_FOV;
 
@@ -151,7 +155,6 @@ public class Game1 : Game
         padding = 10.0f;
 
         movement = Vector3.Zero;
-
 
         radius = Vector3.Distance(cameraTarget, cameraPosition);
 
@@ -234,14 +237,18 @@ public class Game1 : Game
         window_transform = new(pixel, new(panel_properties_hierarchy.local_position.X, panel_properties_hierarchy.local_position.Y + (entries_hierarchy.height - padding)), panel_properties_hierarchy.width, 200, true, window_color, padding, "Transform", ui_font);
 
 
-        textbox_x = new(pixel, new(window_transform.local_position.X + (padding*2), 315), 70, 25, true, Color.White, ui_font, axis_icon_x, 0.0f);
-        textbox_y = new(pixel, new(window_transform.local_position.X + (padding*2), 315), 70, 25, true, Color.White, ui_font, axis_icon_y, horiz_gap);
-        textbox_z = new(pixel, new(window_transform.local_position.X + (padding*2), 315), 70, 25, true, Color.White, ui_font, axis_icon_z, horiz_gap*2);
-        
-        textbox_x = new(pixel, new(window_transform.local_position.X + (padding*2), 315), 70, 25, true, Color.White, ui_font, axis_icon_x, 0.0f);
+        textbox_position_x = new(pixel, new(window_transform.local_position.X + (padding*2), 315), 70, 25, true, Color.White, ui_font, axis_icon_x, 0.0f);
+        textbox_position_y = new(pixel, new(window_transform.local_position.X + (padding*2), 315), 70, 25, true, Color.White, ui_font, axis_icon_y, horiz_gap);
+        textbox_position_z = new(pixel, new(window_transform.local_position.X + (padding*2), 315), 70, 25, true, Color.White, ui_font, axis_icon_z, horiz_gap*2);
 
-        transform_position = new TransformationType(textbox_x, textbox_y, textbox_z, "Position", ui_font, 0.0f);
-        //transform_scale = new TransformationType(textbox_x, textbox_y, textbox_z, "Scale", ui_font, 50.0f);
+        textbox_scale_x = new(pixel, new(window_transform.local_position.X + (padding*2), 365), 70, 25, true, Color.White, ui_font, axis_icon_x, 0.0f);
+        textbox_scale_y = new(pixel, new(window_transform.local_position.X + (padding*2), 365), 70, 25, true, Color.White, ui_font, axis_icon_y, horiz_gap);
+        textbox_scale_z = new(pixel, new(window_transform.local_position.X + (padding*2), 365), 70, 25, true, Color.White, ui_font, axis_icon_z, horiz_gap*2);
+        
+        textbox_FOV = new(pixel, new(window_transform.local_position.X + (padding*2), 350), 70, 25, true, Color.White, ui_font, axis_icon_x, 0.0f);
+
+        transform_position = new TransformationType(textbox_position_x, textbox_position_y, textbox_position_z, "Position", ui_font, 0.0f);
+        transform_scale = new TransformationType(textbox_scale_x, textbox_scale_y, textbox_scale_z, "Scale", ui_font, 50.0f);
         //create new textboxes variables to fix scale and rotation textboxes problem
         
         entries_hierarchy.AddEntry(cube);
@@ -269,9 +276,9 @@ public class Game1 : Game
         button_select.Update();
         button_add.Update();
 
-        //textbox_x.Update();
+        textbox_FOV.Update();
         transform_position.Update();
-        //transform_scale.Update();
+        transform_scale.Update();
 
 
         entries_hierarchy.Update();
@@ -357,7 +364,7 @@ public class Game1 : Game
         window_transform.Draw(_spriteBatch);
 
         transform_position.Draw(_spriteBatch);
-        //transform_scale.Draw(_spriteBatch);
+        transform_scale.Draw(_spriteBatch);
         
         button_view.Draw(_spriteBatch);
         button_select.Draw(_spriteBatch);
